@@ -1,0 +1,131 @@
+\begin{thebibliography}{10}
+
+\bibitem{Abbasi:2009:datatap}
+H.~Abbasi, J.~Lofstead, F.~Zheng, S.~Klasky, K.~Schwan, and M.~Wolf.
+\newblock Extending i/o through high performance data services.
+\newblock In {\em Cluster Computing}, Luoisiana, LA, September 2009. IEEE
+  International.
+
+\bibitem{abbasi:2007:datatap}
+H.~Abbasi, M.~Wolf, and K.~Schwan.
+\newblock {LIVE} data workspace: A flexible, dynamic and extensible platform
+  for petascale applications.
+\newblock In {\em CLUSTER '07: Proceedings of the 2007 IEEE International
+  Conference on Cluster Computing}, pages 341--348, Washington, DC, USA, 2007.
+  IEEE Computer Society.
+
+\bibitem{EricBarton}
+E.~Barton.
+\newblock 2014-03-21.
+\newblock personal communication.
+
+\bibitem{JohnBent}
+J.~Bent.
+\newblock 2014-03-21.
+\newblock personal communication.
+
+\bibitem{bent:2012:burst-buffer}
+J.~Bent, S.~Faibish, J.~Ahrens, G.~Grider, J.~Patchett, P.~Tzelnic, and
+  J.~Woodring.
+\newblock Jitter-free co-processing on a prototype exascale storage stack.
+\newblock In {\em Mass Storage Systems and Technologies (MSST), 2012 IEEE 28th
+  Symposium on}, pages 1--5, April 2012.
+
+\bibitem{bent:2012:challenges}
+J.~Bent, G.~Grider, B.~Kettering, A.~Manzanares, M.~McClelland, A.~Torres, and
+  A.~Torrez.
+\newblock Storage challenges at los alamos national lab.
+\newblock In {\em Mass Storage Systems and Technologies (MSST), 2012 IEEE 28th
+  Symposium on}, pages 1--5, April 2012.
+
+\bibitem{dayal:2013:io-containers}
+J.~Dayal, J.~Cao, G.~Eisenhauer, K.~Schwan, M.~Wolf, F.~Zheng, H.~Abbasi,
+  S.~Klasky, N.~Podhorszki, and J.~Lofstead.
+\newblock I/o containers: Managing the data analytics and visualization
+  pipelines of high end codes.
+\newblock In {\em In Proceedings of International Workshop on High Performance
+  Data Intensive Computing (HPDIC 2013) held in conjunction with IPDPS 2013},
+  Boston, MA, 2013.
+\newblock Best Paper Award.
+
+\bibitem{fastforward:2014:docs}
+Fastforward storage and i/o stack design documents.
+\newblock Intel FastForward Wiki, February 2014.
+\newblock
+  https://wiki.hpdd.intel.com/display/PUB/Fast+Forward+Storage+and\\+IO+Program+Documents.
+
+\bibitem{QuinceyKoziol}
+Q.~Koziol.
+\newblock 2014-03-21.
+\newblock personal communication.
+
+\bibitem{lofstead:2012:txn-metadata}
+J.~Lofstead and J.~Dayal.
+\newblock Transactional parallel metadata services for application workdflows.
+\newblock In {\em In Proceedings of High Performance Computing Meets Databases
+  at Supercomputing}, 2012.
+
+\bibitem{lofstead:2013:pdsw-txn}
+J.~Lofstead, J.~Dayal, I.~Jimenez, and C.~Maltzahn.
+\newblock Efficient transactions for parallel data movement.
+\newblock In {\em The Petascale Data Storage Workshop at Supercomputing},
+  Denver, CO, November 2013.
+
+\bibitem{lofstead:2012:txn}
+J.~Lofstead, J.~Dayal, K.~Schwan, and R.~Oldfield.
+\newblock D2t: Doubly distributed transactions for high performance and
+  distributed computing.
+\newblock In {\em IEEE Cluster Conference}, Beijing, China, September 2012.
+
+\bibitem{lofstead:2011:nessie-staging}
+J.~Lofstead, R.~Oldfiend, T.~Kordenbrock, and C.~Reiss.
+\newblock Extending scalability of collective io through nessie and staging.
+\newblock In {\em The Petascale Data Storage Workshop at Supercomputing},
+  Seattle, WA, November 2011.
+
+\bibitem{nisar:2008:staging}
+A.~Nisar, W.-k. Liao, and A.~Choudhary.
+\newblock Scaling parallel {I/O} performance through {I/O} delegate and caching
+  system.
+\newblock In {\em SC '08: Proceedings of the 2008 ACM/IEEE Conference on
+  Supercomputing}, pages 1--12, Piscataway, NJ, USA, 2008. IEEE Press.
+
+\bibitem{nowoczynski:2008:zest}
+P.~Nowoczynski, N.~Stone, J.~Yanovich, and J.~Sommerfield.
+\newblock Zest checkpoint storage system for large supercomputers.
+\newblock In {\em Petascale Data Storage Workshop, 2008. PDSW '08. 3rd}, pages
+  1 --5, nov. 2008.
+
+\bibitem{oldfield:lwfs}
+R.~A. Oldfield, A.~B. Maccabe, S.~Arunagiri, T.~Kordenbrock, R.~Riesen,
+  L.~Ward, and P.~Widener.
+\newblock Lightweight {I/O} for scientific applications.
+\newblock In {\em Proceedings of the IEEE International Conference on Cluster
+  Computing}, Barcelona, Spain, Sept. 2006.
+
+\bibitem{skourtis:2013:ssd-performance}
+D.~Skourtis, D.~Achlioptas, C.~Maltzahn, and S.~Brandt.
+\newblock High performance \& low latency in solid-state drives through
+  redundancy.
+\newblock In {\em Proceedings of the 1st Workshop on Interactions of
+  {NVM/FLASH} with Operating Systems and Workloads}, {INFLOW} '13, page
+  6:1–6:9, New York, {NY}, {USA}, 2013. {ACM}.
+
+\bibitem{hdf5}
+{The HDF Group}.
+\newblock {Hierarchical data format version 5}, 2000-2014.
+\newblock http://www.hdfgroup.org/HDF5.
+
+\bibitem{weil:2006:ceph}
+S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
+\newblock {Ceph}: A scalable, high-performance distributed file system.
+\newblock In {\em OSDI'06}, Seattle, WA, Nov. 2006.
+
+\bibitem{zheng:2010:predata}
+F.~Zheng, H.~Abbasi, C.~Docan, J.~Lofstead, S.~Klasky, Q.~Liu, M.~Parashar,
+  N.~Podhorszki, K.~Schwan, and M.~Wolf.
+\newblock {PreDatA }- preparatory data analytics on {Peta-Scale} machines.
+\newblock In {\em In Proceedings of 24th IEEE International Parallel and
+  Distributed Processing Symposium, April, Atlanta, Georgia}, 2010.
+
+\end{thebibliography}
