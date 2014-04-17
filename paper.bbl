@@ -77,12 +77,6 @@ J.~Lofstead, J.~Dayal, K.~Schwan, and R.~Oldfield.
   distributed computing.
 \newblock In {\em IEEE Cluster Conference}, Beijing, China, September 2012.
 
-\bibitem{lofstead:2011:nessie-staging}
-J.~Lofstead, R.~Oldfiend, T.~Kordenbrock, and C.~Reiss.
-\newblock Extending scalability of collective io through nessie and staging.
-\newblock In {\em The Petascale Data Storage Workshop at Supercomputing},
-  Seattle, WA, November 2011.
-
 \bibitem{nisar:2008:staging}
 A.~Nisar, W.-k. Liao, and A.~Choudhary.
 \newblock Scaling parallel {I/O} performance through {I/O} delegate and caching
