@@ -1,0 +1,9 @@
+*.sw*
+paper.pdf
+paper.dvi
+paper.aux
+paper.bbl
+paper.log
+paper.blg
+missfont.log
+.DS_Store
