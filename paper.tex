@@ -60,27 +60,28 @@ and beyond the HPC community. With phase 1 of the project complete, it is an
 excellent opportunity to explore the complete design and how it will address
 the needs of extreme scale platforms.  This paper not only provides a timely
 summary of important aspects of the design specifications but also capture the
-underlying reasoning that is not available elsewhere.
+underlying reasoning that is not available elsewhere. With this information, we
+encourate the broader community to understand the design, intent, and future
+directions to foster discussion guiding phase 2 and the ultimate production
+storage stack based on this work.
 
 While many of the design elements are best practices from current research,
 there are many new contributions as well as different integration approaches
 offering different performance and quality of service guarantees. The specifics
-of how the different layers interact offer a new approach for managing
-scientific data for extreme scale platforms.
+of how the different layers interact offer a new approach for managing data for
+extreme scale platforms and workloads.
 
-The integration of the HDF5 interface as the user interface gives a familiar
-way to imteract with all of the new functionality while largely insulating 
+For the current demonstration system, the HDF5 user API gives a familiar
+way to interact with all of the new functionality while largely insulating 
 end-users from the intracisies of dealing with the advanced functionality
-offered by the stack.
+offered by the stack.  The various layers below the user API include optional
+components that may aid in scalability and simplify implementation across a
+wide range of platforms.  The data storage layer offers support both
+for local machine and data center wide storage arrays as part of the design.
 
-The optional components aid in the scalability and simplifying implementation
-across a wide range of platforms.
-
-The data storage layer offers support both for local machine and data center
-wide storage arrays as part of the design.
-
-In addition to these features supporting HPC platforms, the stack also addresses
-the need of big data applications as demonstrated through the Arbitrary Connected Graphs tool.
+In addition to these features supporting HPC platforms, the stack also
+addresses the need of big data applications as demonstrated through the
+Arbitrary Connected Graphs tool.
 
 \end{abstract}
 
@@ -110,23 +111,25 @@ HDF Group. This team has developed a specification
 set~\cite{fastforward:2014:docs} for a future IO stack to address the
 identified challenges. The first phase recently completed with a second phase
 currently getting underway as of early 2014. The core focus of the first phase
-was basic functionality and design. Overriding many of the decisions during
-this and any subsequent phases is the reality of budgets. Placing GBs of NVRAM
-on every node, while a potentially advantageous approach, is not financially
-feasible. With this in mind, the second phase will refine this design
-incorporating fault recovery and other features missing from the first phase.
+was basic functionality and design. While an idealized potential system would
+be the perfect target architecture, the reality of budgets has tempered many of
+the decisions. For exmaple, extensive availability of NVRAN or SSDs on all of
+the compute nodes is currently not economically feasible limiting some of the
+potential design choices.  With this in mind, the second phase will refine this
+design incorporating fault recovery and other features missing from the first
+phase.
 
-The overall design seeks to offer high availability, byte-granular,
+The complete design seeks to offer high availability, byte-granular,
 multi-version concurrency control. Through the use of a copy-on-write style
-mechanism, multiple versions of an object can be stored in potentially greatly
-reduced space. It assumes the client interface will be through an IO library
-affording a more complicated interface that offers richer functionality
-requiring only minimal end-user code changes.  Managing most data access in a
-platform-local layer rather than requiring writing to centralized storage will
-better support the performance and energy requirements of extreme scale
-integrated application workflows. At a more detailed view, the various layers
-of the IO stack each contribute different functionality and performance
-implications.
+mechanism reducing space and time requirements, multiple versions of an object
+can be stored efficiently. By assuming the client interface will be through an
+IO library, a more complicated interface that offers richer functionality can
+be incorporated while requiring only minimal end-user code changes.  Managing
+most data access in a platform-local layer rather than requiring writing to
+centralized storage will better support the performance and energy requirements
+of extreme scale integrated application workflows. At a more detailed view, the
+various layers of the IO stack each contribute different functionality and
+performance implications.
 
 Overall, the architecture shifts from the idea of files and directories to
 containers of objects. This shift avoids the bottlenecks related to the POSIX
@@ -143,49 +146,36 @@ Map-Reduce systems. Key system features are introduced to efficiently support
 these computing models in addition to the typically bursty IO loads of more
 traditional HPC applications.
 
-The basic architecture incorporates five layers some of which are potentially
+The architecture incorporates five layers, some of which are potentially
 optional. The top layer is a high level IO library, such as the demonstration
 HDF-5 library~\cite{hdf5}. The intent is to only have access to the storage
 stack through such an API to manage the complexity of working with the lower
-layers. These changes incorporate the necessary features for ACGs.
+layers and to enable advanced functionality that would require more direct user
+intervention. This layer incorporate the necessary features for ACGs from a
+end-user's perspective.
 
 Below the user API is an IO forwarding layer that redirects IO calls from the
 compute nodes to the IO dispatching layer.  This IO forwarding layer is
-analogous to the function of the IO nodes in a BlueGene machine. The next two
-layers have considerable functionality. The IO dispatcher (IOD) serves as the
-primary storage interface for the IO stack and is the only way to reach the
-persistent storage array in lower layers. Ideally, the IOD layer can be
-optional based on the available hardware. Much of the functionality offered at
-this layer would shift either up or down the stack as discussed in detail
-below. The Distributed Application Object
-Storage (DAOS) layer serves as the persistent storage interface and is intended
-to be the foundation on which everything else is built with no dependence on
-any technologies specified above it. For example, the IOD layer and burst
-buffers are not required for DAOS to operate properly. At the bottom is the
-Versioning Object Storage Device (VOSD).  It serves as the interface for
-storing objects of all types efficiently.
-
-%The core idea for IOD is to provide a way to manage the IO load that is
-%separate from the compute nodes and the storage array. Communication intensive
-%activities, such as data rearrangement, can be moved to the IOD layer
-%offloading the communication load from the compute nodes. IOD has three main
-%purposes. First, if the optional burst buffer is available, it works as a fast
-%cache absorbing write operations for the slower trickle out to the central
-%storage array. It can also be used to retrieve objects from the central storage
-%array for more efficient read operations and offers data filtering to make
-%client reads more efficient.  Second, it offers the transaction mechanism for
-%controlling data set visibility and to manage faults that would prevent a data
-%set from being used. Third, data processing operations can be placed in the
-%IOD. These operations are intended to offer data rearrangement, filtering, and
-%similar operations prior to data reaching the central storage array.
-
-%While these ideas are not necessarily new, they are new twists on best of class
-%efforts for these technologies. For example, offloading the collective
-%two-phase data sieving from the compute nodes to reorganize data has proven
-%effective at reducing the total time for writing data due to fewer participants
-%involved in the communication patterns~\cite{lofstead:2011:nessie-staging}.
-%Beyond these broad items, there are many important details some of which are
-%examined in more detail below.
+analogous to the function of the IO nodes in a BlueGene machine or the passive
+data staging processes demonstrated
+previously~\cite{nisar:2008:staging,Abbasi:2009:datatap}. The next two layers
+have considerable functionality. The IO dispatcher (IOD) serves as the primary
+storage interface for the IO stack and is the only way to reach the persistent
+storage array in lower layers. Ideally, the IOD layer's functionality can be
+optional based on available hardware. Much of the functionality offered at this
+layer would shift either up or down the stack as discussed in detail below. The
+Distributed Asynchronous Object Storage (DAOS) layer serves as the persistent
+storage interface and is intended to be the traditional file system-like
+foundation on which everything else is built with no dependence on any
+technologies specified above it. For example, the IOD layer with or without
+burst buffers is not required for DAOS to operate properly.  Instead, the DAOS
+layer can handle all of the IO operations from the user API layer, albiet with
+the potential performance penalty of manipulating the shared, persistent
+storage array. At the bottom is the Versioning Object Storage Device (VOSD).
+It serves as the interface for storing objects of all types efficiently. Think
+of this layer as the physical disk interface layer. In terms of Lustre, this
+would replace the file system on individual storage targets with an interface
+friendlier to the containers of objects concept used in the higher layers.
 
 Along with the analysis of the published design documents, a discussion of the
 design philosophy representing the overall intent is presented. This
@@ -197,58 +187,93 @@ design as written. These ideas are presented to
 give a fuller picture of where the project is going rather than dwelling on the
 limitations of the published documents.
 
-The rest of the paper is organized as follows. Section~\ref{sec:burst}
-discusses some of the features of incorporating burst buffers as designed and
-suggests some considerations and alternatives for the next generation of this
-project. Section~\ref{sec:transactions} discusses the transactions approach
-offered in the IOD layer and the corresponding epochs in the DAOS layer. It
-also offers a comparison to the \DDT system given the very similar high-level
-design and motivating use case.  Section~\ref{sec:summary} discusses the system
-overall with recommendations on what design elements should be considered based
-on broader issues with current HPC data centers. The paper is concluded in
-Section~\ref{sec:conclusion} with a summary of the broad issues covered in the
-paper.
+The rest of the paper is organized as follows. A brief overview of related work
+is presented first in Section~\ref{sec:related}. Section~\ref{sec:end-user}
+discusses the programmatic interface end users will see when interacting with
+the storage array. This will be discussed in the contect of the HDF-5 based
+example library used for the functionality demonstration. Section~\ref{sec:iof}
+briefly discusses the motivation and proposal for the IO forwarding layer.
+Section~\ref{sec:iod} describes the IO Dispatcher layer and the broad
+functionality it offers. This will detail the pieces of the layer that are
+potentially optional and mention the cross-cutting features discussed in a
+later, cross-cutting section. Section~\ref{sec:daos} discusses how the
+persistent storage array interface itself functions. As with the IOD layer, the
+disucssion of cross-cutting features will be mentioned, but disucssed more
+fully in the cross-cutting section. The VOSD layer is disucssed in
+Section~\ref{sec:vosd}. In particular, the mapping between the DAOS and VOSD
+layers are explored as it pertains to the physical storage. Next is an
+exploration of cross-cutting features like transactions and metadata management
+in Section~\ref{sec:broader}. Since these and other features are spread across
+multiple layers, it makes more sense to discuss them independently once an
+understanding of the overall structure has been presented.  The paper is
+concluded in Section~\ref{sec:conclusion} with a summary of the broad issues
+covered in the paper.
 
-\section{HDF Layer}
-The API has been maintained as much as possible to make backwards compatibility
-easier. Instead, the Virtual Object Layer (VOL), a new layer under development
-for several years has been leveraged to incorporate the needed support.
+\section{Related Work}
+\label{sec:related}
 
-Some additional API functions have been introduced to support....
+Many projects over the last couple of decades have sought to address some
+challenging aspect of parallel file system design. The recent rise of the ``Big
+Data'' applications with different characteristic IO patterns have somewhat
+complicated the picture. Extreme scale machines will be expected to handle both
+the traditional simulation-related workloads as well as applications more
+squarely in the Big Data arena. This will require some adjustments to the
+underlying system for good performance for both scenarios.
 
-The extensions done to HDF5 allows an application to take full advantage
-of the new exascale features. The additions comprise {[}6{]} (Figure 4):
+The major previous work is really limited to full file systems rather than the
+mountain of file system adjustments made over the years. The major players
+related to this work include Ceph, PVFS, Lustre, GPFS, and Panasas.
+
+EXPLAIN A BIT ABOUT HOW EACH CANNOT ADDRESS THE PROBLEMS WITH A CITATION FOR
+EACH. DID I MISS A MAJOR FILE SYSTEM OF NOTE?
+
+\section{End-User API Layer}
+\label{sec:end-user}
+Since the proposal specifies a high-level IO API will be the primary end-user
+interface for programmatically interacting with the FFSIO stack, the team used
+the HDF-5 API and leverated the Virtual Object Layer (VOL) for the initial
+design and implementation demonstration. The VOL provides a way to intercept
+HDF-5 API calls just below the API layer to implement alternative
+functionality. For this project, rather than the default writing to disk in the
+HDF-5 format, the VOL layer is used to interact with the IOD layer and the new
+concepts it offers, such as transactions, completely hidden from the user.
+This both offers a straightforward way for existing applications to test
+against the FFSIO stack and to ensure proper semantics are maintained at the
+lower levels. Some additional API functions have been introduced to support
+new functionality, such as the ACG support for Hadoop-style applications.  The
+additions comprise (Figure~\ref{fig:vol-arch}):
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \itemsep1pt\parskip0pt\parsep0pt
+
 \item
   Object-storage API based on HDF5 to support high-level data models.
   This exposes asynchronous, transactional semantics to the application,
   as well as end-to-end data integrity. It will also allows the usage of
   pointer data types, passing of hints down to the storage and support
   for asynchronous index building, maintenance and querying.
+
 \item
   Virtual Object Layer (VOL) plugin that translates HDF5 API requests
   from applications to IOD API calls.
+
+\item\label{item:fs}
+  Function shipping from Compute Nodes (CN) to IO Nodes (ION). This provides
+  the application developer with the capacity of sending computation down to the
+  IONs and get back results.
+
 \item
-  Function shipping from CN to IONs. This provides the application
-  developer with the capacity of sending computation down to the IONs
-  and get back results.
-\item
-  Analysis Shipping from CN to IONs or DAOS nodes. This is similar to 3
-  but instead of returning the result over the network, it gets stored
-  on the nodes and pointers to it are returned.
+  Analysis Shipping from CN to IONs or DAOS nodes. This is similar
+  to~\ref{item:fs} but instead of returning the result over the network, it
+  gets stored on the nodes and pointers to it are returned.
+
 \end{enumerate}
 
-In terms of the CN-ION communication model, a client/server architecture
-is implemented {[}8{]}: every ION runs an IOFSL (I/O Function Shipping
-Layer) server {[}9{]}; the IOFSL client is integrated into the HDF5
-library which runs on each CN. A client can forward requests to any
-number of IONs. Every I/O operation issued by HDF5 is asynchronously
-shipped to the IOFSL server and asynchronously executed.
+Function and Analysis Shipping are part of the cross-cutting features and are
+discussed in Section~\ref{sec:fn-shipping}.
 
-HDF5 {[}7{]} is a versatile data model containing complex data objects
+HDF5~\cite{hdf5} is a versatile data model containing complex data objects
 and metadata. Its information set is a collection of datasets, groups,
 datatypes and metadata objects. The data model defines mechanisms for
 creating associations between various information items. The main
@@ -257,17 +282,19 @@ components of HDF5 are described below.
 \begin{figure}[htbp]
 \centering
 \includegraphics[scale=0.30]{images/hdf5.png}
-\caption{Sample file illustrating the hierarchical structure of HDF5
-files. \label{hdf5-sample}}
+\caption{Sample file illustrating the hierarchical structure of HDF5 files}
+\label{fig:hdf5-sample}
 \end{figure}
 
 \begin{itemize}
+
 \item
   \textbf{File}: In the HDF5 data model the container of an HDF5 infoset
   is represented by a file. It is a collection of objects that also
   explains the relationship between them. Every file begins with a root
   group ''/'', which serves as the ''starting-point'' in the object
   hierarchy.
+
 \item
   \textbf{Dataset}: HDF5 datasets are objects that represent actual data
   or content. Datasets are arrays which can have multiple dimensions. A
@@ -275,184 +302,51 @@ files. \label{hdf5-sample}}
   captures the rank (number of dimensions), and the current and maximum
   extent in each dimension. The datatype describes the type of its data
   elements.
+
 \item
   \textbf{Group}: A group is an explicit association between HDF5
   objects. It is synonymous with directories in a file system. A group
   could contain multiple other groups, datasets or datatypes within it.
+
 \item
   \textbf{Attribute}: Attributes are used for annotating datasets,
   groups, and datatype objects. They are datasets themselves, and are
   attached to existing objects they annotate.
+
 \end{itemize}
 
-For example, as shown in Figure \ref{hdf5-sample}, the file
-Sample.h5 contains the root group which itself contains a
-group G1 and two datasets, D1 and D2. Group
-G1 contains a dataset D3. Attribute A1 is
-linked to dataset D1. The objects and the relationships between
-them can be represented as a B-tree, which is used internally by HDF5 to
-index its objects.
+For example, as shown in Figure \ref{fig:hdf5-sample}, the file Sample.h5
+contains the root group which itself contains a group G1 and two datasets, D1
+and D2. Group G1 contains a dataset D3. Attribute A1 is linked to dataset D1.
+The objects and the relationships between them can be represented as a B-tree,
+which is used internally by HDF5 to index its objects.
 
-The Fast Forward project is working on the adaptation of the HDF5
-libraries in order to expose the storage stack to applications.
+The Fast Forward project is working on the adaptation of the HDF5 libraries in
+order to expose the storage stack to applications.
 
-\section{I/O Nodes}
-The ``I/O nodes'' handle 
-requests forwarded by the scientific applications, integrate a tier of
-solid-state devices to absorb the burst of random operations, and
-organize/re-format the data so that transfers from the staging area to
-the traditional parallel file system can be done more efficiently. It
-also has the capacity of executing analysis on the fresh data that has
-just been generated by simulation applications running at the compute
-nodes. As the data arrives, re-organization and data preparation can be
-applied in order to anticipate the execution of analytical tasks
-{[}3{]}.
+\subsection{Virtual Object Layer}
+\label{virtual-object-layer}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[scale=0.30]{images/exa-arch.png}
-\caption{Exascale Architecture. \label{exa-arch}}
-\end{figure}
-
-A common cluster configuration for this type of deployment is shown in
-Figure \ref{exa-arch}. The designated I/O nodes (IONs) are connected to
-the compute nodes (CNs) through the same fast fabric (eg. Infiniband),
-while the connection to the external storage cluster is through a
-secondary slower channel (eg. 10Gb ethernet). I/O staging thus
-introduces a new layer in the application-to-storage stack, as shown in
-Figure \ref{exa-stack} (left).
-
-In current proposals, the stack is managed by middleware that seats
-between the application and the parallel file system {[}2,4{]}. Since
-most of the applications assume a POSIX interface to storage {[}5{]},
-existing middleware either transparently handle the I/O operations,
-appearing as regular POSIX calls to applications; or modify the I/O API
-as little as possible in order to minimize the impact on production
-codes.
-
-As we move towards the exascale goal, this way of interfacing with
-storage becomes more of an obstacle. Many features provided by the stack
-are hidden by the middleware/POSIX layers. If these were visible to the
-applications, and if the applications were able to control how the
-underlying layers behave, they would benefit greatly since the domain
-knowledge that is available at the application level could be used to
-execute storage operations efficiently. One more implication of the
-25-year-old POSIX API is in cumbersome middleware, since metadata has to
-be part of the same uni-dimensional byte array being stored.
-
-The Fast Forward Storage I/O project {[}6{]} is aimed at merging the
-features of existing middleware into a next-generation parallel file
-system stack. This new storage API termed the I/O dispatcher (IOD) is
-object-based, transactional, asynchronous and I/O-staging-aware (Figure
-\ref{exa-stack} (right)).
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[scale=0.30]{images/exa-stack.png}
-\caption{Top-to-bottom view of the component stack. \label{exa-stack}}
-\end{figure}
-
-The prototype stack, from a top-down point of view, has the following
-components:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  Arbitrarily Connected Graphs (ACG).
-\item
-  HDF5 extensions.
-\item
-  I/O Dispatcher (IOD).
-\item
-  Distributed Application Object Storage (DAOS).
-\item
-  Versioning Object Storage Device (VOSD).
-\end{enumerate}
-
-Applications running on the compute nodes will be written in Python
-scripts or in C++ using the HDF5 APIs. These applications will execute
-analysis on graph-based data (ACG). The point is to demonstrate both the
-HPC and BigData use cases of the Exascale architecture. The data
-structures will be stored in HDF5, for which new API extensions will be
-implemented. These new API calls will expose the transactional,
-asynchronous and function-forwarding semantics of the underlying stack.
-
-As mentioned before, the stack provides \emph{non-POSIX, object-based,
-transactional and asynchronous active-storage}, meaning that POSIX is
-supplanted by new object interfaces that reach up to the HDF5 layer
-(Application I/O in the stack diagram); transactional semantics are
-present, from HDF down to the VOSD layer (Storage layer); clients don't
-need to wait for any blocking operation; and analysis can be shipped and
-executed on I/O or DAOS nodes.
-
-We give a high-level description of each of layer.
-
-\subsection{ACG}\label{acg}
-
-This will exemplify how applications make use of the Exascale stack. For
-FF, support for
-GraphLab 
-and GraphBuilder will be prototyped, which are graph-processing
-frameworks. GraphBuilder is a set of MapReduce tasks that extract,
-normalize, partition and serialize a graph out of unstructured data, and
-writes graph-specific formats into HDFS. These files are later consumed
-by GraphLab, a vertex-centric, asynchronous execution engine that runs
-directly on top of HDFS (i.e. non-MapReduce). The following illustrates
-the architecture of both frameworks:
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[scale=0.15]{images/graphlab-and-graphbuilder.png}
-\caption{Figure 3. GraphLab and GraphBuilder stacks (taken from
-{[}4{]}).}
-\end{figure}
-
-In order to make both work on top of the exascale stack, both have to be
-modified. After these modifications are implemented, GraphBuilder will
-be able to write the partitioned graph in (the newly proposed) HDF5
-files which will thus be stored in the IOD nodes (or IONs) in a
-parallel-optimized way. On the GraphLab side, HDF5-awareness will allow
-the library to perform at high speeds by benefiting from the new
-features (see next section). In general both frameworks will be modified
-so that calls to HDFS-based formats are replaced by the proposed HDF5
-ones. This is referred to as the HDF Adaptation Layer or HAL and will
-provide, from the GraphBuilder/GraphLab point of view {[}5{]}:
-
-\begin{itemize}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  capability for storing the newly proposed HDF5 format
-\item
-  association of network information to vertices/edges
-\item
-  shipping computation to the IONs
-\item
-  asynchronous vertex updates
-\item
-  efficient data sharing ammong CNs
-\item
-  computation over versioned datasets
-\end{itemize}
-
-\subsection{Virtual Object Layer}\label{virtual-object-layer}
-
-The Virtual Object Layer is an abstraction mechanism internal to the
-HDF5 library {[}\textbf{???}{]}. As shown in Figure \ref{vol-arch} it is
-implemented just below the public API. The VOL exports an interface that
-allows writing plugins for HDF5, thereby enabling developers to store
-objects in a format different from the default HDF5 file format. Plugin
-writers provide an implementation for a set of functions that access
-data on disk or on a parallel file system.
+The Virtual Object Layer is an abstraction mechanism internal to the HDF5
+library~\cite{hdf5}. As shown in Figure~\ref{fig:vol-arch} it is implemented
+just below the public API. The VOL exports an interface that allows writing
+plugins for HDF5, thereby enabling developers to handle the data in ways other
+than necessarily writing to storage in an HDF5 format.  Plugin writers provide
+an implementation for a set of functions that are trusted to provide the
+proper semantics represented by the function for the new environment. For
+example, data staging could be implemented in the VOL layer by replacing
+writing to disk in the HDF5 format to sending data to a data staging area using
+some messaging mechanism.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[scale=0.20]{images/vol-arch.png}
-\caption{Architectural view of the VOL abstraction mechanism.
-\label{vol-arch}}
+\caption{Architectural view of the VOL abstraction mechanism}
+\label{fig:vol-arch}
 \end{figure}
 
-\subsection{IOD VOL plugin}\label{iod-vol-plugin}
+\subsection{IOD VOL plugin}
+\label{iod-vol-plugin}
 
 The IOD VOL plugin serves as the bridge between HDF5 and the IOD API. It
 is also shown in Figure \ref{vol-arch}. The application calls the HDF5
@@ -476,8 +370,40 @@ The mapping between HDF5 objects and IOD objects is the following:
   attribute = key-value store
 \end{itemize}
 
-\subsection{Fast Forward's I/O Dispatcher
-API}\label{fast-forwards-io-dispatcher-api}
+\section{IO Forwarding Layer}
+\label{sec:iof}
+
+This section will briefly describe the limited functionality of the IO
+Forwarding layer and why it was included in the design.  It will not exceed
+probably half of a column.
+
+\section{IOD Layer}
+\label{sec:iod}
+
+The core idea for IOD is to provide a way to manage the IO load that is
+separate from the compute nodes and the storage array. Communication intensive
+activities, such as data rearrangement, can be moved to the IOD layer
+offloading the communication load from the compute nodes. IOD has three main
+purposes. First, if the optional burst buffer is available, it works as a fast
+cache absorbing write operations for the slower trickle out to the central
+storage array. It can also be used to retrieve objects from the central storage
+array for more efficient read operations and offers data filtering to make
+client reads more efficient.  Second, it offers the transaction mechanism for
+controlling data set visibility and to manage faults that would prevent a data
+set from being used. Third, data processing operations can be placed in the
+IOD. These operations are intended to offer data rearrangement, filtering, and
+similar operations prior to data reaching the central storage array.
+
+While these ideas are not necessarily new, they are new twists on best of class
+efforts for these technologies. For example, offloading the collective
+two-phase data sieving from the compute nodes to reorganize data has proven
+effective at reducing the total time for writing data due to fewer participants
+involved in the communication patterns~\cite{lofstead:2011:nessie-staging}.
+Beyond these broad items, there are many important details some of which are
+examined in more detail below.
+
+\subsection{I/O Dispatcher API}
+\label{sec:fast-forwards-io-dispatcher-api}
 
 The Fast Forward I/O and Storage project is aimed at integrating many of
 the services existing currently in middleware libraries in a
@@ -544,19 +470,118 @@ storage cluster. At the semantic level (HDF5), indexes can be created
 for datasets, which results in being able to read through an index
 instead of directly from the base array.
 
-{[}sharding. \label{sharding}{]}{[}sharding{]}
-
 All these distinct alternatives result in having many different ways of
 executing the same analysis task. In the future, we plan to extend our
 design to incorporate an optimization phase that will prepare a task by
 taking into account the distinct possible ways of executing and select
 the most promising one. In our subsequent discussions, we consider only
-data-movement optimization, i.e.~sending the analysis code as close as
+data-movement optimization, i.e., sending the analysis code as close as
 possible to the data. In practice, this means we focus on identifying
 sharding of datasets and execute code accordingly over the appropriate
 shards.
 
-\section{Burst Buffers}
+\subsubsection{Sharding}
+\label{sec:sharding}
+
+The idea of sharding is to store a portion of a data set on a single storage
+target. This is similiar in concept to the HDF-5 hyperslab. The FFSIO stack
+supports sharding the data in the default or some other structured way as well
+as ``re-sharding'' based on application needs. For example, reordering the
+data so that a different dimension is the ``fast'' dimension may greatly
+improve the performance of a subsequent data analytics task. A common scenario
+where this is common is a Fortran code (column-major) writes data for a C code
+(row-major) to analyze.
+
+\subsection{I/O Nodes}
+The ``I/O nodes'' handle requests forwarded by the scientific applications,
+potentially integrate a tier of solid-state devices to absorb the burst of
+random operations, and organize/re-format the data so that transfers to/from
+the staging area from/to the traditional parallel file system can be done more
+efficiently. It also has the capacity to executing analysis on the fresh data
+that has just been generated by simulation applications running at the compute
+nodes. As the data arrives, re-organization and data preparation can be applied
+in order to anticipate the execution of analytical tasks.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.30]{images/exa-arch.png}
+\caption{Exascale Architecture}
+\label{fig:exa-arch}
+\end{figure}
+
+A common cluster configuration for this type of deployment is shown in
+Figure~\ref{fig:exa-arch}. The designated I/O nodes (IONs) are connected to the
+compute nodes (CNs) through the same fast fabric (e.g., InfiniBand), while the
+connection to the external storage cluster is through a secondary slower
+channel (e.g., 10Gb Ethernet). I/O staging thus introduces a new layer in the
+application-to-storage stack, as shown in Figure~\ref{fig:exa-stack} (left).
+
+In current proposals, the stack is managed by middleware that sits between the
+application and the parallel file system. Since most of the applications assume
+a POSIX interface to storage, existing middleware either transparently handle
+the I/O operations, appearing as regular POSIX calls to applications; or modify
+the I/O API as little as possible in order to minimize the impact on production
+codes.
+
+As we move towards the exascale goal, this way of interfacing with storage
+becomes more of an obstacle. Many features provided by the stack are hidden by
+the middleware/POSIX layers. If these were visible to the applications, and if
+the applications were able to control how the underlying layers behave, they
+would benefit greatly since the domain knowledge that is available at the
+application level could be used to execute storage operations efficiently. One
+more implication of the 25-year-old POSIX API is in cumbersome middleware,
+since metadata has to be part of the same uni-dimensional byte array being
+stored.
+
+The Fast Forward Storage I/O project is aimed at merging the features of
+existing middleware into a next-generation parallel file system stack. This new
+storage API termed the I/O dispatcher (IOD) is object-based, transactional,
+asynchronous and I/O-staging-aware (Figure~\ref{fig:exa-stack} (right)).
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.30]{images/exa-stack.png}
+\caption{Top-to-bottom view of the component stack}
+\label{fig:exa-stack}
+\end{figure}
+
+The prototype stack, from a top-down point of view, has the following
+components:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Arbitrarily Connected Graphs (ACG).
+\item
+  HDF5 extensions.
+\item
+  I/O Dispatcher (IOD).
+\item
+  Distributed Asynchronous Object Storage (DAOS).
+\item
+  Versioning Object Storage Device (VOSD).
+\end{enumerate}
+
+Applications running on the compute nodes will be written in Python scripts or
+in C++ using the HDF5 APIs. These applications will execute analysis on
+graph-based data (ACG). The point is to demonstrate both the HPC and BigData
+use cases of the Exascale architecture. The data structures will be stored in
+HDF5, for which new API extensions will be implemented. These new API calls
+will expose the transactional, asynchronous and function-forwarding semantics
+of the underlying stack.
+
+As mentioned before, the stack provides \emph{non-POSIX, object-based,
+transactional and asynchronous active-storage}, meaning that POSIX is
+supplanted by new object interfaces that reach up to the HDF5 layer
+(Application I/O in the stack diagram); transactional semantics are present,
+from HDF down to the VOSD layer (Storage layer); clients don't need to wait for
+any blocking operation; and analysis can be shipped and executed on I/O or DAOS
+nodes.
+
+We give a high-level description of each of layer.
+
+\subsection{Burst Buffers}
 \label{sec:burst}
 
 The idea of burst buffers were initially explored in the context of data
@@ -648,7 +673,8 @@ considered optional. As the design stands today, they are a required part of
 the IOD layer for proper functioning. Unfortunately, it is not clear that they
 can address the performance concerns they are intended to cover.
 
-\subsection{Design Philosophy}
+\noindent\textbf{Design Philosophy}
+
 The burst buffers design, as presented in the IOD documents, limits the
 placement of the function operators and SSD buffers to the IO nodes. The team
 does acknowledge the limitations of this design and intend to ultimately focus
@@ -688,7 +714,43 @@ redeployed for use by the new job. Handling resilience concerns for the IOD
 processes must also be address.  These sorts of considerations still need to be
 made for a full production system.
 
-\section{Transactions and Epochs}
+\section{DAOS Layer}\label{sec:daos}
+The Distributed Asynchronous Object Storage layer serves as the traditional
+file-system interface layer for the storage devices.
+
+\section{VOSD Layer}\label{sec:vosd}
+The Versioning Object Storage Device layer operates as the layer for each
+persistent storage device used to support the parallel storage array.
+
+\section{Broader Design}
+\label{sec:broader}
+
+At a broader level, there are some concerns that were partially clarified
+through conversations with the team.  Consider a shared file system across an
+HPC data center. The current design maintains the metadata in its own
+container. Since copying data from the IOD layer to the DAOS layer requires an
+explicit persist call, how and when synchronizing the metadata across the
+layers and potentially across machines occurs is undefined. Delaying
+synchronization until an explicit persist is called will reduce the update
+frequency, but delays the data visibility on other platforms. Ideally, the
+metadata object would need to be automatically persisted every time a container
+transaction is persisted to the DAOS layer.
+
+The implication of this is that every transaction persist is double operation
+to account for the metadata persist. More importantly, the IOD-layer version of
+the metadata container may contain readable transactions that have not been
+persisted to the DAOS layer. How to handle this inconsistency between the two
+layers still needs to be explored.
+
+A point of confusion rather than a potential design challenge is the change in
+definitions between the IOD layer and the DAOS layer.  For the IOD layer, a
+container is a collection of objects. For the DAOS layer, a container is a
+collection of objects across a set of shards. For the IOD an object may be a
+shard of a global array.  For DAOS, a shard can host a set of DAOS objects.
+Having the same names with locally correct, globally conflicting definitions
+serves to confuse how the system should work.
+
+\subsection{Transactions and Epochs}
 \label{sec:transactions}
 
 The transaction mechanism manifests in two forms. At the IOD layer, they are
@@ -703,7 +765,7 @@ How these differ from the \DDT approach is also explored.  While IOD's and
 high-level design, but very different implementation, to solve the same
 problem.
 
-\subsection{IOD Transactions}
+\subsubsection{IOD Transactions}
 To understand how transactions are used in the IOD layer, some terminology and
 concepts must be explained first. At the coarsest grain level is a container.
 Each container provides the single access context through which to access a
@@ -733,7 +795,8 @@ is provided to the IOD layer. As clients commit their changes to the container,
 the reference count is reduced. Once the count reaches 0, the transaction is
 automatically committed.
 
-\subsubsection{Design Philosophy}
+\noindent\textbf{Design Philosophy}
+
 Undocumented, but inherent in the design of these transactions is how faults
 are detected. The initial design assumes the current Lustre fault detection
 mechanism that can determine if a process or node is no longer reachable. This
@@ -768,7 +831,7 @@ care if one fails, cannot work in the current form. This has been acknowledged
 and is being relaxed requiring a new parameter to the creation of a transaction
 determining if it will be dependent or not.
 
-\subsection{DAOS Epochs}
+\subsubsection{DAOS Epochs}
 The Epoch mechanism differs from transactions. Instead of focusing on when a
 particular output is complete, an epoch represents incremental persisted copies
 of a container. To simplify the mapping between an IOD transaction and the DAOS
@@ -801,7 +864,8 @@ information about containers and objects. The only place where the IOD layer
 manages metadata for itself is to manage how the different objects are striped
 across the IO nodes.
 
-\subsubsection{Design Philosophy}
+\noindent\textbf{Design Philosophy}
+
 While the metadata design is not fully defined, there are a few things that
 are intended. For example, there is a standard, well-known container that is
 the system metadata. This includes the list of all other containers. This
@@ -1023,33 +1087,62 @@ potential issues can be addressed successfully.
 %approach to ensure the integrity of the movement of the data in addition to the
 %agreement of processes about the successful completion of a parallel operation.
 
-\section{Broader Design}
-\label{sec:summary}
+\subsection{Function and Analysis Shipping}
+\label{sec:fn-shipping}
 
-At a broader level, there are some concerns that were partially clarified
-through conversations with the team.  Consider a shared file system across an
-HPC data center. The current design maintains the metadata in its own
-container. Since copying data from the IOD layer to the DAOS layer requires an
-explicit persist call, how and when synchronizing the metadata across the
-layers and potentially across machines occurs is undefined. Delaying
-synchronization until an explicit persist is called will reduce the update
-frequency, but delays the data visibility on other platforms. Ideally, the
-metadata object would need to be automatically persisted every time a container
-transaction is persisted to the DAOS layer.
+In terms of the CN-ION communication model, a client/server architecture
+is implemented: every ION runs an IOFSL (I/O Function Shipping
+Layer) server; the IOFSL client is integrated into the HDF5
+library which runs on each CN. A client can forward requests to any
+number of IONs. Every I/O operation issued by HDF5 is asynchronously
+shipped to the IOFSL server and asynchronously executed.
 
-The implication of this is that every transaction persist is double operation
-to account for the metadata persist. More importantly, the IOD-layer version of
-the metadata container may contain readable transactions that have not been
-persisted to the DAOS layer. How to handle this inconsistency between the two
-layers still needs to be explored.
+\subsection{ACG}\label{acg}
 
-A point of confusion rather than a potential design challenge is the change in
-definitions between the IOD layer and the DAOS layer.  For the IOD layer, a
-container is a collection of objects. For the DAOS layer, a container is a
-collection of objects across a set of shards. For the IOD an object may be a
-shard of a global array.  For DAOS, a shard can host a set of DAOS objects.
-Having the same names with locally correct, globally conflicting definitions
-serves to confuse how the system should work.
+This will exemplify how applications make use of the Exascale stack. For
+FF, support for
+GraphLab 
+and GraphBuilder will be prototyped, which are graph-processing
+frameworks. GraphBuilder is a set of MapReduce tasks that extract,
+normalize, partition and serialize a graph out of unstructured data, and
+writes graph-specific formats into HDFS. These files are later consumed
+by GraphLab, a vertex-centric, asynchronous execution engine that runs
+directly on top of HDFS (i.e., non-MapReduce). The following illustrates
+the architecture of both frameworks:
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.15]{images/graphlab-and-graphbuilder.png}
+\caption{GraphLab and GraphBuilder stacks}
+\label{fig:graphlab-graphbuilder}
+\end{figure}
+
+In order to make both work on top of the exascale stack, both have to be
+modified. After these modifications are implemented, GraphBuilder will
+be able to write the partitioned graph in (the newly proposed) HDF5
+files which will thus be stored in the IOD nodes (or IONs) in a
+parallel-optimized way. On the GraphLab side, HDF5-awareness will allow
+the library to perform at high speeds by benefiting from the new
+features (see next section). In general both frameworks will be modified
+so that calls to HDFS-based formats are replaced by the proposed HDF5
+ones. This is referred to as the HDF Adaptation Layer or HAL and will
+provide, from the GraphBuilder/GraphLab point of view:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  capability for storing the newly proposed HDF5 format
+\item
+  association of network information to vertices/edges
+\item
+  shipping computation to the IONs
+\item
+  asynchronous vertex updates
+\item
+  efficient data sharing ammong CNs
+\item
+  computation over versioned datasets
+\end{itemize}
 
 \section{Conclusions}
 \label{sec:conclusion}
