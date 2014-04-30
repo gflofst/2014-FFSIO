@@ -378,8 +378,7 @@ some messaging mechanism.
 \subsection{IOD VOL plugin}
 \label{iod-vol-plugin}
 
-The IOD VOL plugin serves as the bridge between HDF5 and the IOD API. It
-is also shown in Figure \ref{vol-arch}. The application calls the HDF5
+The IOD VOL plugin serves as the bridge between HDF5 and the IOD API (Figure \ref{fig:vol-arch}). The application calls the HDF5
 library while running on the system's compute nodes. Using the VOL
 architecture, the IOD VOL plugin uses a function shipper (RPC library)
 to forward the VOL calls to a server component running on the I/O nodes
