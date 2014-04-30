@@ -14,16 +14,6 @@ H.~Abbasi, M.~Wolf, and K.~Schwan.
   Conference on Cluster Computing}, pages 341--348, Washington, DC, USA, 2007.
   IEEE Computer Society.
 
-\bibitem{EricBarton}
-E.~Barton.
-\newblock 2014-03-21.
-\newblock personal communication.
-
-\bibitem{JohnBent}
-J.~Bent.
-\newblock 2014-03-21.
-\newblock personal communication.
-
 \bibitem{bent:2012:burst-buffer}
 J.~Bent, S.~Faibish, J.~Ahrens, G.~Grider, J.~Patchett, P.~Tzelnic, and
   J.~Woodring.
@@ -37,6 +27,19 @@ J.~Bent, G.~Grider, B.~Kettering, A.~Manzanares, M.~McClelland, A.~Torres, and
 \newblock Storage challenges at los alamos national lab.
 \newblock In {\em Mass Storage Systems and Technologies (MSST), 2012 IEEE 28th
   Symposium on}, pages 1--5, April 2012.
+
+\bibitem{braam:lustre-arch}
+P.~J. Braam.
+\newblock The lustre storage architecture.
+\newblock Cluster File Systems Inc. Architecture, design, and manual for
+  Lustre, Nov. 2002.
+\newblock http://www.lustre.org/docs/lustre.pdf.
+
+\bibitem{carns:pvfs}
+P.~H. Carns, W.~B. {Ligon III}, R.~B. Ross, and R.~Thakur.
+\newblock {PVFS}: A parallel file system for linux clusters.
+\newblock In {\em Proceedings of the 4th Annual Linux Showcase and Conference},
+  pages 317--327, Atlanta, GA, Oct. 2000. USENIX Association.
 
 \bibitem{dayal:2013:io-containers}
 J.~Dayal, J.~Cao, G.~Eisenhauer, K.~Schwan, M.~Wolf, F.~Zheng, H.~Abbasi,
@@ -54,10 +57,11 @@ Fastforward storage and i/o stack design documents.
 \newblock
   https://wiki.hpdd.intel.com/display/PUB/Fast+Forward+Storage+and\\+IO+Program+Documents.
 
-\bibitem{QuinceyKoziol}
-Q.~Koziol.
-\newblock 2014-03-21.
-\newblock personal communication.
+\bibitem{ghemawat:googlefs}
+S.~Ghemawat, H.~Gobioff, and S.-T. Leung.
+\newblock The {Google} file system.
+\newblock In {\em Proceedings of the NineteenthACM Symposium on Operating
+  Systems Principles}, pages 96--108, Bolton Landing, NY, Oct. 2003. ACM Press.
 
 \bibitem{lofstead:2012:txn-metadata}
 J.~Lofstead and J.~Dayal.
@@ -103,6 +107,26 @@ R.~A. Oldfield, A.~B. Maccabe, S.~Arunagiri, T.~Kordenbrock, R.~Riesen,
 \newblock In {\em Proceedings of the IEEE International Conference on Cluster
   Computing}, Barcelona, Spain, Sept. 2006.
 
+\bibitem{panasas:architecture}
+Object-based storage architecture: Defining a new generation of storage systems
+  built on distributed, intelligent storage devices.
+\newblock Panasas Inc. white paper, version 1.0, Oct. 2003.
+\newblock http://www.panasas.com/docs/.
+
+\bibitem{schmuck:gpfs}
+F.~Schmuck and R.~Haskin.
+\newblock {GPFS}: A shared-disk file system for large computing clusters.
+\newblock In {\em Proceedings of the USENIX FAST '02Conference on File and
+  Storage Technologies}, pages 231--244, Monterey, CA, Jan. 2002. USENIX
+  Association.
+
+\bibitem{Shvachko:2010:hdfs}
+K.~Shvachko, H.~Kuang, S.~Radia, and R.~Chansler.
+\newblock The hadoop distributed file system.
+\newblock In {\em Proceedings of the 2010 IEEE 26th Symposium on Mass Storage
+  Systems and Technologies (MSST)}, MSST '10, pages 1--10, Washington, DC, USA,
+  2010. IEEE Computer Society.
+
 \bibitem{skourtis:2013:ssd-performance}
 D.~Skourtis, D.~Achlioptas, C.~Maltzahn, and S.~Brandt.
 \newblock High performance \& low latency in solid-state drives through
@@ -115,6 +139,13 @@ D.~Skourtis, D.~Achlioptas, C.~Maltzahn, and S.~Brandt.
 {The HDF Group}.
 \newblock {Hierarchical data format version 5}, 2000-2014.
 \newblock http://www.hdfgroup.org/HDF5.
+
+\bibitem{weil:ceph}
+S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
+\newblock Ceph: A scalable, high-performance distributed file system.
+\newblock In {\em Proceedings of the 2006Symposium on Operating Systems Design
+  and Implementation}, pages 307--320. University of California, Santa Cruz,
+  2006.
 
 \bibitem{weil:2006:ceph}
 S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.

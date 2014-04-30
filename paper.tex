@@ -127,9 +127,7 @@ IO library, a more complicated interface that offers richer functionality can
 be incorporated while requiring only minimal end-user code changes.  Managing
 most data access in a platform-local layer rather than requiring writing to
 centralized storage will better support the performance and energy requirements
-of extreme scale integrated application workflows. At a more detailed view, the
-various layers of the IO stack each contribute different functionality and
-performance implications.
+of extreme scale integrated application workflows.
 
 Overall, the architecture shifts from the idea of files and directories to
 containers of objects. This shift avoids the bottlenecks related to the POSIX
@@ -146,45 +144,53 @@ Map-Reduce systems. Key system features are introduced to efficiently support
 these computing models in addition to the typically bursty IO loads of more
 traditional HPC applications.
 
-The architecture incorporates five layers, some of which are potentially
-optional. The top layer is a high level IO library, such as the demonstration
-HDF-5 library~\cite{hdf5}. The intent is to only have access to the storage
-stack through such an API to manage the complexity of working with the lower
-layers and to enable advanced functionality that would require more direct user
-intervention. This layer incorporate the necessary features for ACGs from a
-end-user's perspective.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{images/arch-mapping}
+\caption{Target Architecture and Component Mapping}
+\label{fig:arch-mapping}
+\end{figure}
+
+At a more detailed view, the various layers of the IO stack each contribute
+different functionality and performance implications.  The
+architecture (Figure~\ref{fig:arch-mapping}) incorporates five layers, some of
+which have potentially optional components.  The top layer is generally a high
+level IO library, such as the demonstration HDF-5 library~\cite{hdf5}. It is in
+dark blue. The intent is to only have access to the storage stack through such
+an API to manage the complexity of working with the lower layers and to enable
+advanced functionality that would require more direct user intervention. This
+layer incorporate the necessary features for ACGs from a end-user's
+perspective.
 
 Below the user API is an IO forwarding layer that redirects IO calls from the
-compute nodes to the IO dispatching layer.  This IO forwarding layer is
-analogous to the function of the IO nodes in a BlueGene machine or the passive
-data staging processes demonstrated
+compute nodes to the IO dispatching layer (in black).  This IO forwarding layer
+is analogous to the function of the IO nodes in a BlueGene machine or the
+passive data staging processes demonstrated
 previously~\cite{nisar:2008:staging,Abbasi:2009:datatap}. The next two layers
 have considerable functionality. The IO dispatcher (IOD) serves as the primary
 storage interface for the IO stack and is the only way to reach the persistent
-storage array in lower layers. Ideally, the IOD layer's functionality can be
-optional based on available hardware. Much of the functionality offered at this
-layer would shift either up or down the stack as discussed in detail below. The
-Distributed Asynchronous Object Storage (DAOS) layer serves as the persistent
-storage interface and is intended to be the traditional file system-like
-foundation on which everything else is built with no dependence on any
-technologies specified above it. For example, the IOD layer with or without
-burst buffers is not required for DAOS to operate properly.  Instead, the DAOS
-layer can handle all of the IO operations from the user API layer, albiet with
-the potential performance penalty of manipulating the shared, persistent
-storage array. At the bottom is the Versioning Object Storage Device (VOSD).
-It serves as the interface for storing objects of all types efficiently. Think
-of this layer as the physical disk interface layer. In terms of Lustre, this
-would replace the file system on individual storage targets with an interface
-friendlier to the containers of objects concept used in the higher layers.
+storage array in lower layers (in green). Ideally, the IOD layer's
+functionality can be optional based on available hardware. Much of the
+functionality offered at this layer would shift either up or down the stack as
+discussed in detail below. The Distributed Asynchronous Object Storage (DAOS)
+layer serves as the persistent storage interface and is intended to be the
+traditional file system-like foundation on which everything else is built with
+no dependence on any technologies specified above it (in pink and yellow). For
+example, the IOD layer with or without burst buffers is not required for DAOS
+to operate properly.  Instead, the DAOS layer can handle all of the IO
+operations from the user API layer, albiet with the potential performance
+penalty of manipulating the shared, persistent storage array. At the bottom is
+the Versioning Object Storage Device (VOSD) (in purple).  It serves as the
+interface for storing objects of all types efficiently. Think of this layer as
+the physical disk interface layer. In terms of Lustre, this would replace the
+file system on individual storage targets with an interface friendlier to the
+containers of objects concept used in the higher layers.
 
 Along with the analysis of the published design documents, a discussion of the
 design philosophy representing the overall intent is presented. This
 information represents information that may or may not have been written down,
-but is the intent of ultimate product. These insights were gained based on
-personal conversations with the team
-members~\cite{JohnBent,QuinceyKoziol,EricBarton} understanding the current
-design as written. These ideas are presented to
-give a fuller picture of where the project is going rather than dwelling on the
+but is the intent of ultimate product.  These ideas are presented to give a
+fuller picture of where the project is going rather than dwelling on any
 limitations of the published documents.
 
 The rest of the paper is organized as follows. A brief overview of related work
@@ -221,11 +227,35 @@ squarely in the Big Data arena. This will require some adjustments to the
 underlying system for good performance for both scenarios.
 
 The major previous work is really limited to full file systems rather than the
-mountain of file system adjustments made over the years. The major players
-related to this work include Ceph, PVFS, Lustre, GPFS, and Panasas.
+mountain of file system adjustments made over the years.
 
-EXPLAIN A BIT ABOUT HOW EACH CANNOT ADDRESS THE PROBLEMS WITH A CITATION FOR
-EACH. DID I MISS A MAJOR FILE SYSTEM OF NOTE?
+Ceph~\cite{weil:ceph} is a distributed object store and file system. It offers
+both a POSIX and object interface including features typically found in parallel
+file systems. Ceph's unique striping approach uses pseudo-random numbers with a
+known seed eliminating the need for the metadata service to track where each
+stripe in a parallel file is placed.
+
+PVFS~\cite{carns:pvfs} offers optimizations to reduce metadata server load,
+such as a single process opening a file and sharing the handle.
+
+Lustre~\cite{braam:lustre-arch} has become the defacto standard on most major
+clusters offering scalable performance and fine-grained end-user and programmatic control over how data is placed in the storage system. Scalability limitations are part of the motivation for the FFSIO project.
+
+GPFS~\cite{schmuck:gpfs} offers a hands-off approach for providing good performance for scaling parallel IO tasks and is used extensively by its owner, IBM.
+
+Panasas~\cite{panasas:architecture} seeks to offer a dynamically adaptive striping system that detects the need for additional stripes for performance and adjusts the file layout as necessary.
+
+Other file systems, like GoogleFS~\cite{ghemawat:googlefs}, address distributed
+rather than parallel computing and cannot be compared directly. The primary
+difference between distributed and parallel file systems is the ability of the
+file system to retrieve data simultaneously from multiple clients, in parallel,
+and treat the resulting collection of pieces as a single object. Distributed
+file systems rely on a single client creating a file, but distributing the set
+of files across a wide array of storage devices. The other, popular distributed
+file system of note is HDFS~\cite{Shvachko:2010:hdfs} that is distributed as
+part of Hadoop. These other file systems are mainly of interest in the context
+of the ACG features of FFSIO and will be discussed more in
+Section~\ref{sec:acg}.
 
 \section{End-User API Layer}
 \label{sec:end-user}
@@ -292,7 +322,7 @@ components of HDF5 are described below.
   \textbf{File}: In the HDF5 data model the container of an HDF5 infoset
   is represented by a file. It is a collection of objects that also
   explains the relationship between them. Every file begins with a root
-  group ''/'', which serves as the ''starting-point'' in the object
+  group ``/'', which serves as the ``starting-point'' in the object
   hierarchy.
 
 \item
@@ -377,7 +407,7 @@ This section will briefly describe the limited functionality of the IO
 Forwarding layer and why it was included in the design.  It will not exceed
 probably half of a column.
 
-\section{IOD Layer}
+\section{IO Dispatcher Layer}
 \label{sec:iod}
 
 The core idea for IOD is to provide a way to manage the IO load that is
@@ -646,23 +676,6 @@ severe performance problems~\cite{skourtis:2013:ssd-performance}. The inclusion
 of an optional use SSD layer in the new Trinity machine at Los Alamos will
 offer a test bed to determine how likely these observed problems would affect a
 production extreme scale platform.
-
-%Current NAND-based flash devices top out at around 400 MB/sec.
-%The key spec that is missing from this number is that 400 MB/sec is a measure
-%of the fixed number of available IOPS multiplied by the block size. This
-%represents the ideal streaming performance possible. The problem is that it
-%costs an IOP to read 1 byte or 1 block (4KB or 8KB, depending on the device).
-%It costs 1 IOP to write a full block--usually. In some cases, it will cost 2
-%IOPs.  This accounts for the required pre-erase write prior to writing to a
-%reused block. In the worst case, it can be 3 IOPS per write. This would be for
-%a partial block write (read the old block, erase, write the modified block).
-%One-third of 400 MB/sec, about 133 MB/sec, is well below the streaming
-%performance of HDDs.  Granted, there is still rotational and seek latency to
-%deal with for HDDs, but the advantage for SSDs has evaporated and potentially
-%turned into a penalty at a considerable cost premium.  There are faster SSD
-%solutions on the market that incorporate DRAM for caching and using the PCIe
-%bus, for example, but their price precludes them from use in an extreme scale
-%platform.
 
 Given these features, the optionality and even incorporation of burst buffers
 in the current design should be carefully considered. Much of the advanced, key
@@ -941,13 +954,6 @@ scalability issues and demonstrated a scalable client-side coordination model
 with excellent performance. The performance measured for a complex transaction
 with \DDT is illustrated in Figure~\ref{fig:performance}. This performance is
 explored in detail in a previous paper~\cite{lofstead:2013:pdsw-txn}.
-%The
-%breakdown of the number of participants in each role is shown in
-%Table~\ref{tab:scaling}. For comparison, consider the Number of
-%Sub-Coordinators equivalent to IOD processes. The Processes Per Sub-Coordinator
-%represents the number of clients that use a particular IOD process. For these
-%tests, we maintained a balanced distribution and always used at least two
-%sub-coordinators to slow down the processing.
 
 \begin{figure}[ht]
 %\vspace{-0.15in}
@@ -958,36 +964,6 @@ explored in detail in a previous paper~\cite{lofstead:2013:pdsw-txn}.
 \label{fig:performance}
 %\vspace{-0.15in}
 \end{figure}
-
-%\begin{table}[ht]
-%    \vspace{-0.15in}
-%    \centering
-%    \caption[Scaling Configuration]{Performance Tests Scaling Configuration}
-%    \bigskip
-%    \vspace{-0.15in}
-%
-%    \begin{tabular}{|r|r|r|}
-%\hline
-%Processes & \vtop{\hbox{\strut Number of}\hbox{\strut Sub-Coordinators}} & \vtop{\hbox{\strut Processes Per} \hbox{\strut Sub-Coordinator}}\\
-%\hline
-%%8 & 2 & 4 \\
-%%16 & 2 & 8 \\
-%%32 & 2 & 16 \\
-%%64 & 2 & 32 \\
-%%128 & 2 & 64 \\
-%256 & 2 & 128 \\
-%512 & 2 & 256 \\
-%1024 & 4 & 256 \\
-%2048 & 8 & 256 \\
-%4096 & 16 & 256 \\
-%8192 & 32 & 256 \\
-%16384 & 64 & 256 \\
-%32768 & 128 & 256 \\
-%65536 & 256 & 256 \\
-%\hline
-%    \end{tabular}
-%    \label{tab:scaling}
-%\end{table}
 
 At a high level, both \DDT and the IOD transactions have the same design. In
 both cases, a hierarchical model is employed. In the case of \DDTns, it is a
@@ -1051,42 +1027,6 @@ task-based approaches. Since it can work for the bulk-synchronous model also,
 it is a more broadly applicable approach. This assumes that the observed
 potential issues can be addressed successfully.
 
-%\subsection{Comparison to Other Protocols}
-%Alternatives, such as Paxos~\cite{Lamport:1998:paxos} algorithms like
-%ZooKeeper~\cite{Hunt:2010:zookeeper}, suffer from two limitations making them
-%unsuitable for this environment. First, the distributed servers in Paxos
-%systems are all distributed copies of each other that eventually become
-%consistent. Given the scale we wish to address, a single node's memory is
-%unlikely to be able to hold all of the data necessary for many operations at
-%scale. They also do not have a guarantee for when consensus will be achieved
-%without using slower synchronous calls. For the tight timing we wish to
-%support, we need guarantees of when a consistent state has been achieved.
-%Second, these systems also all assume that updates are initiated from a single
-%client process rather than a parallel set of processes as is the standard in
-%HPC environments.
-%
-%\DDT uses a second layer of coordination on the client side that greatly
-%increases the scalability by consolidating messages from clients into unique
-%sets prior to sending to the overall coordinator. A gossip
-%protocol~\cite{ganesh:2003:gossip-protocols} may appear sufficient for this
-%purpose, but the delay of eventual consistency is strictly avoided with this
-%protocol to ensure guarantees at particular states in the code. For example, if
-%a failure occurs, the global understanding of the role of all processes is
-%required in order for effective communication to occur for operations like
-%creating sub-transactions or voting. In this case, the protocol can offer
-%stronger statements about consistency than these protocols offer.  These
-%features offer a way to easily scale the transaction protocol given the
-%guarantees we wish to offer. The IOD approach does nothing to address these
-%concerns.
-%
-%Another effort to offer consistency and data integrity for the ZFS file
-%system~\cite{zhang:2010:zfs} covers some of the same territory. Instead of a
-%focus on the processes all having a notion of completion as a transaction, this
-%work focuses on the integrity of the data movement operations. We view this
-%work as something that should be considered hand-in-hand with a transaction
-%approach to ensure the integrity of the movement of the data in addition to the
-%agreement of processes about the successful completion of a parallel operation.
-
 \subsection{Function and Analysis Shipping}
 \label{sec:fn-shipping}
 
@@ -1097,7 +1037,8 @@ library which runs on each CN. A client can forward requests to any
 number of IONs. Every I/O operation issued by HDF5 is asynchronously
 shipped to the IOFSL server and asynchronously executed.
 
-\subsection{ACG}\label{acg}
+\subsection{ACG}
+\label{sec:acg}
 
 This will exemplify how applications make use of the Exascale stack. For
 FF, support for

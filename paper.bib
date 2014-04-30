@@ -481,3 +481,182 @@ keywords = {performance, {QoS}, solid-state drives, storage virtualization},
 pages = {6:1–6:9}
 }
 
+@string{fast = {Conference on File and Storage Technologies}}
+
+@string{fast2002 = procofthe # {USENIX FAST '02} # fast}
+
+@string{usenix = {USENIX Association}}
+
+@inproceedings{schmuck:gpfs,
+        Abstract = {GPFS is IBM's parallel, shared-disk file system for cluster computers,
+        available on the RS/6000 SP parallel supercomputer and on Linux clusters.
+        GPFS is used on many of the largest supercomputers in the world.
+        GPFS was built on many of the ideas that were developed in the academic
+        community over the last several years, particularly distributed locking
+        and recovery technology. To date it has been a matter of conjecture
+        how well these ideas scale. We have had the opportunity to test those
+        limits in the context of a product that runs on the largest systems
+        in existence. While in many cases existing ideas scaled well, new
+        approaches were necessary in many key areas. This paper describes
+        GPFS, and discusses how distributed locking and recovery techniques
+        were extended to scale to large clusters. },
+        Address = {Monterey, CA},
+        Author = {Frank Schmuck and Roger Haskin},
+        Booktitle = fast2002,
+        Keywords = {file systems},
+        Month = jan,
+        Pages = {231--244},
+        Private = {Not read; not in files; on shelf.},
+        Publisher = usenix,
+        Title = {{GPFS}: A Shared-Disk File System for Large Computing Clusters},
+        Url = {http://www.usenix.org/publications/library/proceedings/fast02/schmuck.html},
+        Year = {2002},
+        Bdsk-Url-1 = {http://www.usenix.org/publications/library/proceedings/fast02/schmuck.html}}
+
+@string{osdi = {Symposium on Operating Systems Design and Implementation}}
+
+@string{osdi2006 = procofthe # {2006} # osdi}
+
+@inproceedings{weil:ceph,
+        Abstract = {We have developed Ceph, a distributed file system that provides excellent
+        performance, reliability, and scalability. Ceph maximizes the separation
+        between data and metadata management by replacing allocation tables
+        with a pseudo-random data distribution function (CRUSH) designed
+        for heterogeneous and dynamic clusters of unreliable object storage
+        devices (OSDs). We leverage device intelligence by distributing data
+        replication, failure detection and recovery to semi-autonomous OSDs
+        running a specialized local object file system. A dynamic distributed
+        metadata cluster provides extremely efficient metadata management
+        and seamlessly adapts to a wide range of general purpose and scientific
+        computing file system workloads. Performance measurements under a
+        variety of workloads show that Ceph has excellent I/O performance
+        and scalable metadata management, supporting more than 250,000 metadata
+        operations per second.},
+        Author = {Sage A. Weil and Scott A. Brandt and Ethan L. Miller and Darrell D. E. Long and Carlos Maltzahn},
+        Booktitle = osdi2006,
+        Date-Modified = {2009-01-06 17:33:31 -0700},
+        Keywords = {distributed file systems, metadata scaling, object storage, distributed metadata, pario-bib},
+        Organization = {University of California, Santa Cruz},
+        Owner = {raoldfi},
+        Pages = {307--320},
+        Timestamp = {2007.03.27},
+        Title = {Ceph: A Scalable, High-Performance Distributed File System},
+        Url = {http://www.usenix.org/events/osdi06/tech/weil.html},
+        Year = {2006},
+        Bdsk-Url-1 = {http://www.usenix.org/events/osdi06/tech/weil.html}}
+
+@inproceedings{carns:pvfs,
+        Abstract = {As Linux clusters have matured as platforms for low-cost, high-performance
+        parallel computing, software packages to provide many key services
+        have emerged, especially in areas such as message passing and networking.
+        One area devoid of support, however, has been parallel file systems,
+        which are critical for high-performance I/O on such clusters. We
+        have developed a parallel file system for Linux clusters, called
+        the Parallel Virtual File System (PVFS). PVFS is intended both as
+        a high-performance parallel file system that anyone can download
+        and use and as a tool for pursuing further research in parallel I/O
+        and parallel file systems for Linux clusters. \par In this paper,
+        we describe the design and implementation of PVFS and present performance
+        results on the Chiba City cluster at Argonne. We provide performance
+        results for a workload of concurrent reads and writes for various
+        numbers of compute nodes, I/O nodes, and I/O request sizes. We also
+        present performance results for MPI-IO on PVFS, both for a concurrent
+        read/write workload and for the BTIO benchmark. We compare the I/O
+        performance when using a Myrinet network versus a fast-ethernet network
+        for I/O-related communication in PVFS. We obtained read and write
+        bandwidths as high as 700~Mbytes/sec with Myrinet and 225~Mbytes/sec
+        with fast ethernet.},
+        Address = {Atlanta, GA},
+        Author = {Philip H. Carns and Walter B. {Ligon III} and Robert B. Ross and Rajeev Thakur},
+        Booktitle = {Proceedings of the 4th Annual Linux Showcase and Conference},
+        Comment = {won the Best Paper Award.},
+        Keywords = {parallel I/O, parallel file system, cluster file system, Linux, pario-bib},
+        Month = oct,
+        Pages = {317--327},
+        Publisher = {USENIX Association},
+        Title = {{PVFS}: A Parallel File System for Linux Clusters},
+        Toread = {5},
+        Url = {http://www.mcs.anl.gov/~thakur/papers/pvfs.ps},
+        Year = {2000},
+        Bdsk-Url-1 = {http://www.mcs.anl.gov/~thakur/papers/pvfs.ps}}
+
+@misc{braam:lustre-arch,
+        Author = {Peter J. Braam},
+        Comment = {Describes an open-source project to develop an object-based file system for clusters. Related to the NASD project at CMU (http://www.pdl.cs.cmu.edu/NASD/).},
+        Date-Modified = {2009-01-06 17:33:31 -0700},
+        Howpublished = {Cluster File Systems Inc. Architecture, design, and manual for Lustre},
+        Keywords = {object-based storage, distributed file systems, parallel file system, pario-bib},
+        Month = nov,
+        Note = {http://www.lustre.org/docs/lustre.pdf},
+        Title = {The Lustre Storage Architecture},
+        Url = {http://www.lustre.org/docs/lustre.pdf},
+        Year = {2002},
+        Bdsk-Url-1 = {http://www.lustre.org/docs/lustre.pdf}}
+
+@misc{panasas:architecture,
+        Comment = {The paper describes the architecture of proprietary object-based storage system for clusters--an extension of Garth Gibson's NASD work at CMU (see gibson:nasd-tr). Similar to Lustre (cfs:lustre, braam:lustre-arch).},
+        Date-Modified = {2009-01-06 17:33:31 -0700},
+        Howpublished = {Panasas Inc. white paper, version 1.0},
+        Key = {PA},
+        Keywords = {object-based storage, distributed file systems, parallel file system, pario-bib},
+        Month = oct,
+        Note = {http://www.panasas.com/docs/},
+        Title = {Object-based Storage Architecture: Defining a new generation of storage systems built on distributed, intelligent storage devices},
+        Url = {http://www.panasas.com/docs/Object_Storage_Architecture_WP.pdf},
+        Year = {2003},
+        Bdsk-Url-1 = {http://www.panasas.com/docs/Object_Storage_Architecture_WP.pdf}}
+
+@string{sosp = {ACM Symposium on Operating Systems Principles}}
+
+@string{sosp19 = procofthe # {Nineteenth} # sosp}
+
+@string{acmpress = {ACM Press}}
+
+@inproceedings{ghemawat:googlefs,
+        Abstract = {We have designed and implemented the Google File System, a scalable
+        distributed file system for large distributed data-intensive applications.
+        It provides fault tolerance while running on inexpensive commodity
+        hardware, and it delivers high aggregate performance to a large number
+        of clients. While sharing many of the same goals as previous distributed
+        file systems, our design has been driven by observations of our application
+        workloads and technological environment, both current and anticipated,
+        that reflect a marked departure from some earlier file system assumptions.
+        This has led us to re-examine traditional choices and explore radically
+        different design points. \par The file system has successfully met
+        our storage needs. It is widely deployed within Google as the storage
+        platform for the generation and processing of data used by our service
+        as well as research and development efforts that require large data
+        sets. The largest cluster to date provides hundreds of terabytes
+        of storage across thousands of disks on over a thousand machines,
+        and it is concurrently accessed by hundreds of clients. \par In this
+        paper, we present file system interface extensions designed to support
+        distributed applications, discuss many aspects of our design, and
+        report measurements from both micro-benchmarks and real world use.},
+        Address = {Bolton Landing, NY},
+        Author = {Sanjay Ghemawat and Howard Gobioff and Shun-Tak Leung},
+        Booktitle = sosp19,
+        Date-Modified = {2009-01-06 17:33:31 -0700},
+        Keywords = {distributed file systems, pario-bib},
+        Month = oct,
+        Pages = {96--108},
+        Publisher = acmpress,
+        Title = {The {Google} File System},
+        Url = {http://www.cs.rochester.edu/sosp2003/papers/p125-ghemawat.pdf},
+        Year = {2003},
+        Bdsk-Url-1 = {http://www.cs.rochester.edu/sosp2003/papers/p125-ghemawat.pdf}}
+
+@inproceedings{Shvachko:2010:hdfs,
+ author = {Shvachko, Konstantin and Kuang, Hairong and Radia, Sanjay and Chansler, Robert},
+ title = {The Hadoop Distributed File System},
+ booktitle = {Proceedings of the 2010 IEEE 26th Symposium on Mass Storage Systems and Technologies (MSST)},
+ series = {MSST '10},
+ year = {2010},
+ isbn = {978-1-4244-7152-2},
+ pages = {1--10},
+ numpages = {10},
+ url = {http://dx.doi.org/10.1109/MSST.2010.5496972},
+ doi = {10.1109/MSST.2010.5496972},
+ acmid = {1914427},
+ publisher = {IEEE Computer Society},
+ address = {Washington, DC, USA},
+} 
