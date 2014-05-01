@@ -660,3 +660,73 @@ pages = {6:1–6:9}
  publisher = {IEEE Computer Society},
  address = {Washington, DC, USA},
 } 
+
+@inproceedings{lofstead:adaptable,
+  crossref="lofstead:adaptible",
+}
+
+@inproceedings{lofstead:2009:adaptable,
+  crossref="lofstead:adaptible",
+}
+
+@string{ipdps = {International Parallel and Distributed Processing Symposium}}
+
+@string{ipdps2009 = procofthe # ipdps}
+
+@inproceedings{lofstead:adaptible,
+        Address = {Rome, Italy},
+        Author = {Jay Lofstead and Fang Zheng and Scott Klasky and Karsten Schwan},
+        Booktitle = ipdps2009,
+        Date-Added = {2009-10-14 13:52:24 -0600},
+        Date-Modified = {2009-10-14 13:55:04 -0600},
+        Keywords = {application programmer interface, pario-bib},
+        Title = {Adaptable, metadata rich {IO} methods for portable high performance {IO}},
+        Year = {2009}}
+
+@inproceedings{lofstead:2010:io-variability,
+ crossref={lofstead:io-variability},
+}
+
+@inproceedings{lofstead:2010:sc,
+ crossref={lofstead:io-variability},
+}
+
+@string{sc2010 = procof # {SC2010: High Performance Networking and Computing}}
+
+@inproceedings{lofstead:io-variability,
+        Author = {Jay Lofstead and Fang Zheng and Qing Liu and Scott Klasky and Ron Oldfield and Todd Kordenbrock and Karsten Schwan and Matthew Wolf},
+        Booktitle = sc2010,
+        Date-Added = {2010-06-21 17:16:42 -0600},
+        Date-Modified = {2010-06-21 17:21:14 -0600},
+        Keywords = {variability studies, pario-bib},
+        Month = nov,
+        Title = {Managing Variability in the {IO} Performance of Petascale Storage Systems},
+        Year = {2010}}
+
+@article{rodeh:2013:btrfs,
+  title={Btrfs: The linux b-tree filesystem},
+  author={Rodeh, Ohad and Bacik, Josef and Mason, Chris},
+  abstract={BTRFS is a Linux Filesystem, headed towards mainline default status. It is based on copy-on-write, allowing for encodingcient snapshots and
+clones. It uses b-trees as its main on-disk data-structure. The design goal is to work well for many use cases and workloads. To this
+end, much effort has been directed to maintaining even performance as
+the filesystem ages, rather than trying to support a particular narrow
+benchmark use case.
+A Linux filesystem is installed on smartphones as well as enterprise
+servers. This entails challenges on many different fronts.
+Scalability: The filesystem must scale in many dimensions: disk
+space, memory, and CPUs.
+Data integrity: Losing data is not an option, and much effort
+is expended to safeguard the content. This includes checksums,
+metadata duplication, and RAID support built into the filesystem.
+Disk diversity: the system should work well with SSDs and hard disks. It is also expected to be able to use an array of different
+sized disks; posing challenges to the RAID and striping mechanisms.
+This paper describes the core ideas, data-structures, and algorithms
+of this filesystem. It sheds light on the challenges posed by defragmentation in the presence of snapshots, and the tradeoffs required to
+maintain even performance in the face of a wide spectrum of workloads.},
+  journal={ACM Transactions on Storage (TOS)},
+  volume={9},
+  number={3},
+  pages={9},
+  year={2013},
+  publisher={ACM}
+}

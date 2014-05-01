@@ -41,16 +41,6 @@ P.~H. Carns, W.~B. {Ligon III}, R.~B. Ross, and R.~Thakur.
 \newblock In {\em Proceedings of the 4th Annual Linux Showcase and Conference},
   pages 317--327, Atlanta, GA, Oct. 2000. USENIX Association.
 
-\bibitem{dayal:2013:io-containers}
-J.~Dayal, J.~Cao, G.~Eisenhauer, K.~Schwan, M.~Wolf, F.~Zheng, H.~Abbasi,
-  S.~Klasky, N.~Podhorszki, and J.~Lofstead.
-\newblock I/o containers: Managing the data analytics and visualization
-  pipelines of high end codes.
-\newblock In {\em In Proceedings of International Workshop on High Performance
-  Data Intensive Computing (HPDIC 2013) held in conjunction with IPDPS 2013},
-  Boston, MA, 2013.
-\newblock Best Paper Award.
-
 \bibitem{fastforward:2014:docs}
 Fastforward storage and i/o stack design documents.
 \newblock Intel FastForward Wiki, February 2014.
@@ -63,29 +53,26 @@ S.~Ghemawat, H.~Gobioff, and S.-T. Leung.
 \newblock In {\em Proceedings of the NineteenthACM Symposium on Operating
   Systems Principles}, pages 96--108, Bolton Landing, NY, Oct. 2003. ACM Press.
 
-\bibitem{lofstead:2012:txn-metadata}
-J.~Lofstead and J.~Dayal.
-\newblock Transactional parallel metadata services for application workdflows.
-\newblock In {\em In Proceedings of High Performance Computing Meets Databases
-  at Supercomputing}, 2012.
-
-\bibitem{lofstead:2013:pdsw-txn}
-J.~Lofstead, J.~Dayal, I.~Jimenez, and C.~Maltzahn.
-\newblock Efficient transactions for parallel data movement.
-\newblock In {\em The Petascale Data Storage Workshop at Supercomputing},
-  Denver, CO, November 2013.
-
-\bibitem{lofstead:2012:txn}
-J.~Lofstead, J.~Dayal, K.~Schwan, and R.~Oldfield.
-\newblock D2t: Doubly distributed transactions for high performance and
-  distributed computing.
-\newblock In {\em IEEE Cluster Conference}, Beijing, China, September 2012.
-
 \bibitem{lofstead:2011:nessie-staging}
 J.~Lofstead, R.~Oldfiend, T.~Kordenbrock, and C.~Reiss.
 \newblock Extending scalability of collective io through nessie and staging.
 \newblock In {\em The Petascale Data Storage Workshop at Supercomputing},
   Seattle, WA, November 2011.
+
+\bibitem{lofstead:2009:adaptable}
+J.~Lofstead, F.~Zheng, S.~Klasky, and K.~Schwan.
+\newblock Adaptable, metadata rich {IO} methods for portable high performance
+  {IO}.
+\newblock In {\em Proceedings of the International Parallel and Distributed
+  Processing Symposium}, Rome, Italy, 2009.
+
+\bibitem{lofstead:2010:io-variability}
+J.~Lofstead, F.~Zheng, Q.~Liu, S.~Klasky, R.~Oldfield, T.~Kordenbrock,
+  K.~Schwan, and M.~Wolf.
+\newblock Managing variability in the {IO} performance of petascale storage
+  systems.
+\newblock In {\em Proceedings ofSC2010: High Performance Networking and
+  Computing}, Nov. 2010.
 
 \bibitem{nisar:2008:staging}
 A.~Nisar, W.-k. Liao, and A.~Choudhary.
@@ -113,6 +100,11 @@ Object-based storage architecture: Defining a new generation of storage systems
 \newblock Panasas Inc. white paper, version 1.0, Oct. 2003.
 \newblock http://www.panasas.com/docs/.
 
+\bibitem{rodeh:2013:btrfs}
+O.~Rodeh, J.~Bacik, and C.~Mason.
+\newblock Btrfs: The linux b-tree filesystem.
+\newblock {\em ACM Transactions on Storage (TOS)}, 9(3):9, 2013.
+
 \bibitem{schmuck:gpfs}
 F.~Schmuck and R.~Haskin.
 \newblock {GPFS}: A shared-disk file system for large computing clusters.
@@ -126,14 +118,6 @@ K.~Shvachko, H.~Kuang, S.~Radia, and R.~Chansler.
 \newblock In {\em Proceedings of the 2010 IEEE 26th Symposium on Mass Storage
   Systems and Technologies (MSST)}, MSST '10, pages 1--10, Washington, DC, USA,
   2010. IEEE Computer Society.
-
-\bibitem{skourtis:2013:ssd-performance}
-D.~Skourtis, D.~Achlioptas, C.~Maltzahn, and S.~Brandt.
-\newblock High performance \& low latency in solid-state drives through
-  redundancy.
-\newblock In {\em Proceedings of the 1st Workshop on Interactions of
-  {NVM/FLASH} with Operating Systems and Workloads}, {INFLOW} '13, page
-  6:1–6:9, New York, {NY}, {USA}, 2013. {ACM}.
 
 \bibitem{hdf5}
 {The HDF Group}.
@@ -151,6 +135,12 @@ S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
 S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
 \newblock {Ceph}: A scalable, high-performance distributed file system.
 \newblock In {\em OSDI'06}, Seattle, WA, Nov. 2006.
+
+\bibitem{zhang:2010:zfs}
+Y.~Zhang, A.~Rajimwale, A.~C. Arpaci-Dusseau, and R.~H. Arpaci-Dusseau.
+\newblock End-to-end data integrity for file systems: A zfs case study.
+\newblock In R.~C. Burns and K.~Keeton, editors, {\em FAST}, pages 29--42.
+  USENIX, 2010.
 
 \bibitem{zheng:2010:predata}
 F.~Zheng, H.~Abbasi, C.~Docan, J.~Lofstead, S.~Klasky, Q.~Liu, M.~Parashar,
