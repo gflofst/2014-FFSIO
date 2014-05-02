@@ -1,5 +1,12 @@
 \begin{thebibliography}{10}
 
+\bibitem{abbasi:2011:c-on-demand}
+H.~Abbasi, G.~Eisenhauer, M.~Wolf, K.~Schwan, and S.~Klasky.
+\newblock Just in time: adding value to the io pipelines of high performance
+  applications with jitstaging.
+\newblock In {\em Proceedings of the 20th international symposium on High
+  performance distributed computing}, pages 27--36. ACM, 2011.
+
 \bibitem{Abbasi:2009:datatap}
 H.~Abbasi, J.~Lofstead, F.~Zheng, S.~Klasky, K.~Schwan, and M.~Wolf.
 \newblock Extending i/o through high performance data services.
@@ -118,6 +125,13 @@ K.~Shvachko, H.~Kuang, S.~Radia, and R.~Chansler.
 \newblock In {\em Proceedings of the 2010 IEEE 26th Symposium on Mass Storage
   Systems and Technologies (MSST)}, MSST '10, pages 1--10, Washington, DC, USA,
   2010. IEEE Computer Society.
+
+\bibitem{Soumagne:2013:mercury}
+J.~Soumagne, D.~Kimpe, J.~A. Zounmevo, M.~Chaarawi, Q.~Koziol, A.~Afsahi, and
+  R.~B. Ross.
+\newblock Mercury: Enabling remote procedure call for high-performance
+  computing.
+\newblock In {\em CLUSTER}, pages 1--8. IEEE, 2013.
 
 \bibitem{hdf5}
 {The HDF Group}.
