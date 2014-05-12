@@ -1260,27 +1260,26 @@ executed. As it is currently implemented, the only functionality that can be
 ``shipped'' already exists on the IONs and is activated using RPC calls. This
 will be re-evaluated for phase two to provide more dynamic functionality.
 
-\subsection{ACG}
+\subsection{Arbitrarily Connected Graphs}
 \label{sec:acg}
 
 What people popularly consider Big Data applications fall into two broad
-categories. First, data processing tasks that fit into the MapReduce model
+categories. First, data processing tasks that can fit into the MapReduce model
 where data is tagged and sorted to discover relationships. These sorts of
 applications only require scale out rather than scale up. Scaling out requires
 replicas to process data simultaneously, but do not need to coordinate for that
 data processing. Scaling up, what scientific simulations do, requires sometimes
-serious coordination between the data processing processes for any of them to
-succeed. The second category is more similar to scientific simulations in that
-it requires information from other processes to succeed. These graph-style
-applications can be done using Hadoop, but it does not fit as well.
-
-To address these graph applications, GraphLab and GraphBuilder are evaluated
-to determine how to extend the IO stack to better support these applications.
-GraphBuilder is a set of MapReduce tasks that extract, normalize, partition and
-serialize a graph out of unstructured data, and writes graph-specific formats
-into HDFS. These files are later consumed by GraphLab, a vertex-centric,
-asynchronous execution engine that runs directly on top of HDFS (i.e.,
-non-MapReduce). The following illustrates the architecture of both frameworks:
+serious coordination between the processes for any of them to succeed. In the
+middle are graph applications that, with some replicated data, can be made to
+fit reasonably well into the MapReduce model. The challenge is having access to
+the edge and vertex lists effectively to build partitions for independent
+processing. GraphBuilder~\cite{Jain:2013:GraphBuilder} is a tool to generate
+effective graph paritions reducing the load for using MapReduce to process
+graph data sets. GraphLab~\cite{Low:2012:GraphLab} offers a way to process
+these graphs efficiently for parallel platforms using a minimum of
+communication. Using these tools as motivators, changes to the HDF5 interface
+and the underlying storage infrastructure is proposed.  The following
+illustrates the architecture of both frameworks:
 
 \begin{figure}[htbp]
 \centering
@@ -1292,15 +1291,15 @@ non-MapReduce). The following illustrates the architecture of both frameworks:
 \vspace{-0.10in}
 \end{figure}
 
-In order to make both work on top of the exascale stack, both have to be
-modified. After these modifications are implemented, GraphBuilder will
-be able to write the partitioned graph in the newly proposed HDF5
-files which will thus be stored in the IOD nodes (or IONs) in a
+In order to make both of these tools work on top of the exascale stack, they
+both have to be modified. After these modifications are implemented,
+GraphBuilder will be able to write the partitioned graph in the newly proposed
+HDF5 files which will thus be stored in the IOD nodes (or IONs) in a
 parallel-optimized way. On the GraphLab side, HDF5-awareness will allow
 the library to perform at high speeds by benefiting from the new
 features, such as the function shipping. In general both frameworks will be
 modified so that calls to HDFS-based formats are replaced by the proposed HDF5
-ones. This is referred to as the HDF Adaptation Layer or HAL and will
+equivalents. This is referred to as the HDF Adaptation Layer or HAL and will
 provide, from the GraphBuilder/GraphLab point of view:
 
 \begin{itemize}
@@ -1321,7 +1320,7 @@ provide, from the GraphBuilder/GraphLab point of view:
 
 The initial phase of this project has determined the necessary changes in the
 HDF5 format to support these features. These identified features will be
-proven during phase 2 with a demonstration of GraphBuilder and GraphLab.
+proven during phase two with a demonstration of GraphBuilder and GraphLab.
 
 \section{Demonstration}
 \label{sec:evaluation}
@@ -1334,7 +1333,9 @@ this IO stack. To demonstrate the viability of the IO stack described in this
 paper, we show some very early performance results from the untuned prototype.
 
 All of the tests are performed on the Buffy Cray test cluster at Los Alamos
-National Laboratory. It consists of ......
+National Laboratory. It consists of 84 nodes each with dual, 8 core Intel
+Xeon ES-2670 CPUs at 2.6 GHz and 32 GB RAM. The inteconnect is Cray Gemini.
+The storage array are three sets of SSD-based lustre file systems.
 
 We run two different sets of tests. The first set in
 Figure~\ref{fig:eval-hosts} show the reading and writing performance for

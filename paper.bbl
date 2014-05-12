@@ -60,6 +60,13 @@ S.~Ghemawat, H.~Gobioff, and S.-T. Leung.
 \newblock In {\em Proceedings of the NineteenthACM Symposium on Operating
   Systems Principles}, pages 96--108, Bolton Landing, NY, Oct. 2003. ACM Press.
 
+\bibitem{Jain:2013:GraphBuilder}
+N.~Jain, G.~Liao, and T.~L. Willke.
+\newblock Graphbuilder: Scalable graph etl framework.
+\newblock In {\em First International Workshop on Graph Data Management
+  Experiences and Systems}, GRADES '13, pages 4:1--4:6, New York, NY, USA,
+  2013. ACM.
+
 \bibitem{lofstead:2011:nessie-staging}
 J.~Lofstead, R.~Oldfiend, T.~Kordenbrock, and C.~Reiss.
 \newblock Extending scalability of collective io through nessie and staging.
@@ -80,6 +87,12 @@ J.~Lofstead, F.~Zheng, Q.~Liu, S.~Klasky, R.~Oldfield, T.~Kordenbrock,
   systems.
 \newblock In {\em Proceedings ofSC2010: High Performance Networking and
   Computing}, Nov. 2010.
+
+\bibitem{Low:2012:GraphLab}
+Y.~Low, D.~Bickson, J.~Gonzalez, C.~Guestrin, A.~Kyrola, and J.~M. Hellerstein.
+\newblock Distributed graphlab: A framework for machine learning and data
+  mining in the cloud.
+\newblock {\em Proc. VLDB Endow.}, 5(8):716--727, Apr. 2012.
 
 \bibitem{nisar:2008:staging}
 A.~Nisar, W.-k. Liao, and A.~Choudhary.
