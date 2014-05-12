@@ -985,9 +985,11 @@ this IO stack. To demonstrate the viability of the IO stack described in this
 paper, we show some very early performance results from the untuned prototype.
 
 All of the tests are performed on the Buffy Cray test cluster at Los Alamos
-National Laboratory. It consists of 84 nodes each with dual, 8 core Intel
-Xeon ES-2670 CPUs at 2.6 GHz and 32 GB RAM. The interconnect is Cray Gemini.
-The storage array are three sets of SSD-based Lustre file systems.
+National Laboratory. It consists of 82 nodes. Of these, 64 are compute nodes
+each with dual, 16 core Intel Xeon ES-2670 CPUs at 2.6 GHz and 32 GB RAM. The
+interconnect is Cray Aries. The 18 IO nodes are single socket, 8 core Intel
+Xeon ES-2670 CPUs at 2.6 GHz with 32 GB of RAM.  The storage array are three
+sets of SSD-based Lustre file systems.
 
 We run two different sets of tests. The first set in
 Figure~\ref{fig:eval-hosts} show the reading and writing performance for
