@@ -362,7 +362,7 @@ difficulty porting applications to the new IO stack.
 \vspace{-0.10in}
 \centering
 \includegraphics[width=\columnwidth]{images/vol-arch.png}
-\vspace{-0.10in}
+\vspace{-0.20in}
 \caption{Architectural view of the VOL abstraction mechanism}
 \label{fig:vol-arch}
 \vspace{-0.10in}
@@ -382,28 +382,31 @@ and executed at the IONs.
 
 Since HDF5 has traditionally offered an interface focused on files and the
 internal data types, such as datasets, these concepts must be mapped onto the
-proposed FFSIO data storage concepts. This mapping is shown in Table~\ref{tab:mapping}
+proposed FFSIO data storage concepts. At a high level, think of the HDF5 types
+mapping to FFSIO types as follows: file $\rightarrow$ container, dataset $\rightarrow$
+array, and groups and attributes $\rightarrow$ key-value store.
+%This mapping is shown in Table~\ref{tab:mapping}
 
-\begin{table}[ht]
-    \vspace{-0.10in}
-    \centering
-    \caption[HDF5 to FFSIO Mapping]{HDF5 Data Model to FFSIO Data Model Mapping}
-    \bigskip
-    \vspace{-0.15in}
-
-    \begin{tabular}{|r|r|}
-\hline
-HDF5 & FFSIO\\
-\hline
-file & container \\
-dataset & array \\
-group & key-value store \\
-attribute(s) & key-value store \\
-\hline
-    \end{tabular}
-    \label{tab:mapping}
-\end{table}
-
+%\begin{table}[ht]
+%    \vspace{-0.10in}
+%    \centering
+%    \caption[HDF5 to FFSIO Mapping]{HDF5 Data Model to FFSIO Data Model Mapping}
+%    \bigskip
+%    \vspace{-0.15in}
+%
+%    \begin{tabular}{|r|r|}
+%\hline
+%HDF5 & FFSIO\\
+%\hline
+%file & container \\
+%dataset & array \\
+%group & key-value store \\
+%attribute(s) & key-value store \\
+%\hline
+%    \end{tabular}
+%    \label{tab:mapping}
+%\end{table}
+%
 In Section~\ref{sec:iod} below, the FFSIO types are described in more detail.
 
 \section{IO Forwarding Layer}
@@ -984,12 +987,15 @@ requirements or concerns that may have been missed in the conceptualization of
 this IO stack. To demonstrate the viability of the IO stack described in this
 paper, we show some very early performance results from the untuned prototype.
 
-All of the tests are performed on the Buffy Cray test cluster at Los Alamos
-National Laboratory. It consists of 82 nodes. Of these, 64 are compute nodes
-each with dual, 16 core Intel Xeon ES-2670 CPUs at 2.6 GHz and 32 GB RAM. The
-interconnect is Cray Aries. The 18 IO nodes are single socket, 8 core Intel
-Xeon ES-2670 CPUs at 2.6 GHz with 32 GB of RAM.  The storage array are three
-sets of SSD-based Lustre file systems.
+All of the tests are performed on the Buffy Cray XC30-AC at LANL.  It consists
+of 64 compute nodes each with dual, 8 core Intel Xeon ES-2670 CPUs at 2.6 GHz
+and 64 GB RAM.  The interconnect is Cray Aries. There are 14 IO nodes
+consisting of single socket, 8 core Intel Xeon ES-2670 CPUs at 2.6 GHz with 32
+GB of RAM.  There are also a metadata, login, and 2 boot nodes.  The storage
+array has disk and SSD paritions. One is a DDN Lustre system with 192 TB disk
+usable with a minimum of 5 GB/sec performance. The rest are SSDs consisting of
+an EMC flash array connected via FDR InfiniBand with 22 TB and 48 GB/sec write
+performance.
 
 We run two different sets of tests. The first set in
 Figure~\ref{fig:eval-hosts} show the reading and writing performance for
