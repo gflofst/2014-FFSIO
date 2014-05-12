@@ -288,11 +288,6 @@ the new API.  The additions comprise (Figure~\ref{fig:vol-arch}):
   integrity, and data type and functions to support the ACG functionality more
   efficiently than the current API.
 
-%\item
-%  Virtual Object Layer (VOL) offers the ability to plug in new implementations
-%  for HDF5 semantics. In this case, the HDF5 calls are implemented using the
-%  IOD or DAOS API rather than MPI-IO or POSIX.
-
 \item\label{item:fs}
   Function shipping from Compute Nodes (CN) to IO Nodes (ION). This provides
   the application developer with the capability of sending computation down to
@@ -314,16 +309,6 @@ and metadata. Its information set is a collection of datasets, groups,
 datatypes and metadata objects. The data model defines mechanisms for
 creating associations between various information items. The main
 components of HDF5 are described below.
-
-%\begin{figure}[htbp]
-%\vspace{-0.10in}
-%\centering
-%\includegraphics[width=\columnwidth]{images/hdf5.png}
-%\vspace{-0.20in}
-%\caption{Sample file illustrating the hierarchical structure of HDF5 files}
-%\label{fig:hdf5-sample}
-%\vspace{-0.25in}
-%\end{figure}
 
 \begin{itemize}
 
@@ -352,12 +337,6 @@ components of HDF5 are described below.
   datasets themselves and are attached to existing objects.
 
 \end{itemize}
-
-%For example, as shown in Figure \ref{fig:hdf5-sample}, the file Sample.h5
-%contains the root group which itself contains a group G1 and two datasets, D1
-%and D2. Group G1 contains a dataset D3. Attribute A1 is linked to dataset D1.
-%The objects and the relationships between them can be represented as a B-tree,
-%which is used internally by HDF5 to index its objects.
 
 \subsection{Virtual Object Layer}
 \label{virtual-object-layer}
@@ -388,9 +367,6 @@ difficulty porting applications to the new IO stack.
 \label{fig:vol-arch}
 \vspace{-0.10in}
 \end{figure}
-
-%\subsection{IOD VOL plugin}
-%\label{iod-vol-plugin}
 
 The IOD VOL plugin serves as the bridge between HDF5 and the IOD or DAOS Layer
 (Figure~\ref{fig:vol-arch}). The application calls the HDF5 library while
@@ -495,35 +471,6 @@ involved in the communication patterns~\cite{lofstead:2011:nessie-staging}.
 Beyond these broad items, there are many important details some of which are
 examined in more detail below.
 
-%\subsection{IO Dispatcher API}
-%\label{sec:fast-forwards-io-dispatcher-api}
-%
-%The Fast Forward IO and Storage project is aimed at integrating many of
-%the services existing currently in middleware libraries in a
-%next-generation storage stack, exposed through a non-POSIX,
-%transactional, asynchronous, object-based API.
-%
-%From a high-level point of view, the Fast Forward's IO Dispatcher (IOD)
-%interface allows the user to:
-%
-%\begin{itemize}
-%\itemsep1pt\parskip0pt\parsep0pt
-%\item
-%  transactions
-%\item
-%  asynchrony
-%\item
-%  objects
-%\item
-%  layout
-%\item
-%  placement
-%\item
-%  formats
-%\end{itemize}
-%
-%Type of objects:
-
 \subsection{FFSIO Data Model Types}
 \label{sec:data-model}
 
@@ -602,19 +549,10 @@ for datasets resulting in being able to read through an index instead of
 directly from the base array.
 
 All of these distinct alternatives result in having many different ways for
-executing the same analysis task.
-%In the future, we plan to extend our
-%design to incorporate an optimization phase that will prepare a task by
-%taking into account the distinct possible ways of executing and select
-%the most promising one.
-In the subsequent discussions, we consider only
-data-movement optimization, i.e., sending the analysis code as close as
-possible to the data. In practice, this means we focus on identifying
-sharding of datasets and execute code accordingly over the appropriate
-shards.
-
-%At the DAOS layer, the sharding can be changed based on the type of storage
-%devices beneath it. 
+executing the same analysis task.  In the subsequent discussions, we consider
+only data-movement optimization, i.e., sending the analysis code as close as
+possible to the data. In practice, this means we focus on identifying sharding
+of datasets and execute code accordingly over the appropriate shards.
 
 \subsection{IO Nodes}
 IOD processes are hosted on the IO nodes that interface a general compute area
@@ -648,69 +586,6 @@ the underlying storage array better than simple forwaring gateways. For this
 project, using something like SSDs on the IO nodes is termed a {\em Burst
 Buffer} and is disucssed below.
 
-%In current proposals, the stack is managed by middleware that sits between the
-%application and the parallel file system. Since most of the applications assume
-%a POSIX interface to storage, existing middleware either transparently handle
-%the IO operations, appearing as regular POSIX calls to applications; or modify
-%the IO API as little as possible in order to minimize the impact on production
-%codes.
-%
-%As we move towards the exascale goal, this way of interfacing with storage
-%becomes more of an obstacle. Many features provided by the stack are hidden by
-%the middleware/POSIX layers. If these were visible to the applications, and if
-%the applications were able to control how the underlying layers behave, they
-%would benefit greatly since the domain knowledge that is available at the
-%application level could be used to execute storage operations efficiently. One
-%more implication of the 25-year-old POSIX API is in cumbersome middleware,
-%since metadata has to be part of the same uni-dimensional byte array being
-%stored.
-%
-%The Fast Forward Storage IO project is aimed at merging the features of
-%existing middleware into a next-generation parallel file system stack. This new
-%storage API termed the IO dispatcher (IOD) is object-based, transactional,
-%asynchronous and IO-staging-aware (Figure~\ref{fig:exa-stack} (right)).
-
-%\begin{figure}[htbp]
-%\centering
-%\includegraphics[width=\columnwidth]{images/exa-stack.png}
-%\caption{Top-to-bottom view of the component stack}
-%\label{fig:exa-stack}
-%\end{figure}
-
-%The prototype stack, from a top-down point of view, has the following
-%components:
-%
-%\begin{enumerate}
-%\def\labelenumi{\arabic{enumi}.}
-%\itemsep1pt\parskip0pt\parsep0pt
-%\item
-%  Arbitrarily Connected Graphs (ACG).
-%\item
-%  HDF5 extensions.
-%\item
-%  IO Dispatcher (IOD).
-%\item
-%  Distributed Asynchronous Object Storage (DAOS).
-%\item
-%  Versioning Object Storage Device (VOSD).
-%\end{enumerate}
-%
-%Applications running on the compute nodes will be written in Python scripts or
-%in C++ using the HDF5 APIs. These applications will execute analysis on
-%graph-based data (ACG). The point is to demonstrate both the HPC and BigData
-%use cases of the Exascale architecture. The data structures will be stored in
-%HDF5, for which new API extensions will be implemented. These new API calls
-%will expose the transactional, asynchronous and function-forwarding semantics
-%of the underlying stack.
-
-%As mentioned before, the stack provides \emph{non-POSIX, object-based,
-%transactional and asynchronous active-storage}, meaning that POSIX is
-%supplanted by new object interfaces that reach up to the HDF5 layer
-%(Application IO in the stack diagram); transactional semantics are present,
-%from HDF down to the VOSD layer (Storage layer); clients don't need to wait for
-%any blocking operation; and analysis can be shipped and executed on IO or DAOS
-%nodes.
-
 \subsection{Burst Buffers}
 \label{sec:burst}
 
@@ -722,40 +597,6 @@ The desired outcome of these initial studies is to motivate how such
 functionality might be incorporated and the potential benefits.  Later, these
 concepts were proposed to be incorporated into the existing IO stack
 architecture~\cite{nowoczynski:2008:zest,bent:2012:challenges,bent:2012:burst-buffer}.
-%The current Fast Forward IOD design recommends incorporating SSDs, but
-%specifically lists these devices as optional. Unfortunately, not incorporating
-%burst buffers and the use of SSDs in the IOD layer may be problematic.  First,
-%the IOD design currently is written assuming burst buffers. This means that the
-%bulk of IO operations will only hit the IOD layer and proposed functionality,
-%such as the function shipping, do not discuss the impact on the DAOS layer or
-%the operators themselves should a burst buffer not be available.  Consider the
-%important functionality of data rearrangement and doing things like changing
-%the fast array dimension on shared, spinning media.  The design of DAOS assumes
-%that it will only be involved when persisting a completed transaction and only
-%for a fraction of the total transactions created.  Transaction frequency at the
-%IOD layer can be higher since IOD does not ``flatten'' transactions. Flattening
-%is the process of transferring the set of copy-on-write changes from
-%transaction/epoch $n$ to transaction $n+m$ into the DAOS layer. The DAOS layer
-%mirrors the copy-on-write functionality, but stores the differences between
-%epochs rather than individual transactions. The primary difference is that at
-%the DAOS layer, data is stored in large, logically contiguous chunks to manage
-%the metadata load and hopefully improve read performance.
-
-%One of the bigger concerns is the observation that the original data staging
-%proposals all used compute nodes while the newer proposals seek not only to
-%make them a fixed portion of the IO stack, but also shared across all machine
-%users. The PreDatA~\cite{zheng:2010:predata} paper in particular examines the
-%potential costs and advantages of where to place operators similar to the IOD
-%proposed function shipping. There are two key takeaways from PreDatA. First,
-%placement matters.  Depending on the communication intensity vs. computation
-%intensity, where along the IO path to place the operation can matter
-%significantly. Second, and more importantly, the amount of time spent
-%processing for the operators was stretched to the point where it consumed
-%nearly all of the time between IO operations. The given ratios of compute
-%processes to staging process examined is representative for future extreme
-%scale platforms. If anything, the ratios offer more staging processes than IOD
-%processes would be available.
-%
 
 In the case of the written IOD design, it describes a fixed-sized staging area
 that is partitioned on a per-application basis. As part of an application
@@ -764,41 +605,12 @@ number of IO nodes for exclusive use during the application run. This provides
 guarantees about how much burst buffer space and processing capability will be
 available for the applications.
 
-%This is unlikely to be useful
-%because of the limited compute and communication capacity to spare to perform
-%these operations at a bottleneck in the IO path.  The use of a separate data
-%staging area intentionally separate from the IO path allows using operators on
-%limited resources leaving the IO path clear for strictly data movement. A
-%nuance of this design is discussed in the Design Philosophy below.
-
 Future work will generalize this model to potentially support dynamic IO node
 allocation and examine the possibility of oversubscription. It will be strictly
 necessary to consider shared IO nodes for cases where the number of deployed
 applications exceeds the number of IO nodes.  This first phase focuses on
 extreme scale application runs that use the vast majority of a platform rather
 than a capacity cluster where end-to-end performance is a lesser concern.
-
-%By concentrating the Burst Buffers and function shipping into the storage
-%stack, three problems arise.  First, the amount of network bandwidth, IO
-%bandwidth, and compute power consumed for example operations from a single
-%application is likely to completely monopolize the IOD processes. Second, if
-%space and time partitioning is used instead, the functionality risks being too
-%small to be useful. Third, the long-term hardware performance advantage for
-%SSDs is questionable. Recent studies have shown that the erase-before-write
-%and interference between reading and writing with flash-based SSDs can cause
-%severe performance problems~\cite{skourtis:2013:ssd-performance}. The inclusion
-%of an optional use SSD layer in the new Trinity machine at Los Alamos will
-%offer a test bed to determine how likely these observed problems would affect a
-%production extreme scale platform.
-%
-%Given these features, the optionality and even incorporation of burst buffers
-%in the current design should be carefully considered. Much of the advanced, key
-%functionality proposed as they are currently designed ultimately relies on the
-%existence of burst buffers to work. Further thought about how to have an IOD
-%layer both with and without a burst buffer is required before they can be
-%considered optional. As the design stands today, they are a required part of
-%the IOD layer for proper functioning. Unfortunately, it is not clear that they
-%can address the performance concerns they are intended to cover.
 
 \noindent\textbf{Design Philosophy}
 
@@ -827,19 +639,6 @@ local data within the IOD layer rather than against the globally shared DAOS
 layer. With the additional desire to support using compute node resources for
 these operations, serious work will be required to make a fully functional
 end-to-end IOD layer implementation for a production system.
-
-%Another concern that is acknowledged, but no thought has been applied to, is
-%the requirement that a single IOD process of the set assigned to an application
-%is the master for any operation.  Should the number of concurrent applications
-%exceed the available nodes, sharing an IOD process will be required. The
-%requirements both in terms of scheduling and resource management were cut from
-%the project due to funding limitations. Since partitioning of the IOD processes
-%for exclusive use by particular applications is the assumed operating mode,
-%should insufficient IOD resources be available, either a job could be delayed
-%or IOD resources could be reallocated from a different process could be
-%redeployed for use by the new job. Handling resilience concerns for the IOD
-%processes must also be address.  These sorts of considerations still need to be
-%made for a full production system.
 
 \section{DAOS Layer}
 \label{sec:daos}
@@ -892,12 +691,6 @@ symbolic links to all of the shards it contains and maintains the epoch ID.
 In particular the Highest Committed Epoch (HCE) is an important concept for
 quickly identifying which version of a shard to retrieve and to block writes to
 older epochs since those have been committed.
-
-%Epochs are represented through the shard mechanism. Each container shard is
-%versioned according to the transactions in the IOD layer that are persisted to
-%the DAOS layer as an epoch. The container shard is a piece of the container
-%with the contained objects concept. Since the container is largely logical,
-%this generally maps to a shard of an object within a container.
 
 Overall, the DAOS layer serves as the shared persistent storage interface for
 the IO stack. In the case of a data center-wide storage array, the DAOS layer
@@ -955,31 +748,6 @@ In the subsections that follow, we examine transactions and epochs, metadata
 management, function and analysis shipping, and the aribtrary connected graphs
 support.
 
-%At a broader level, there are some concerns that were partially clarified
-%through conversations with the team.  Consider a shared file system across an
-%HPC data center. The current design maintains the metadata in its own
-%container. Since copying data from the IOD layer to the DAOS layer requires an
-%explicit persist call, how and when synchronizing the metadata across the
-%layers and potentially across machines occurs is undefined. Delaying
-%synchronization until an explicit persist is called will reduce the update
-%frequency, but delays the data visibility on other platforms. Ideally, the
-%metadata object would need to be automatically persisted every time a container
-%transaction is persisted to the DAOS layer.
-%
-%The implication of this is that every transaction persist is double operation
-%to account for the metadata persist. More importantly, the IOD-layer version of
-%the metadata container may contain readable transactions that have not been
-%persisted to the DAOS layer. How to handle this inconsistency between the two
-%layers still needs to be explored.
-%
-%A point of confusion rather than a potential design challenge is the change in
-%definitions between the IOD layer and the DAOS layer.  For the IOD layer, a
-%container is a collection of objects. For the DAOS layer, a container is a
-%collection of objects across a set of shards. For the IOD an object may be a
-%shard of a global array.  For DAOS, a shard can host a set of DAOS objects.
-%Having the same names with locally correct, globally conflicting definitions
-%serves to confuse how the system should work.
-
 \subsection{Transactions and Epochs}
 \label{sec:transactions}
 
@@ -991,10 +759,6 @@ access by treating the transaction ID of committed transaction as a version
 identifier.  At the DAOS layer and below, they are called epochs and represent
 persisted (durable) transactions from the IOD layer. Each of these offers
 different functionality, but are connected as is explained below.
-%How these differ from the \DDT approach is also explored.  While IOD's and
-%\DDTns's transactions are seemingly very different, they use a similar
-%high-level design, but very different implementation, to solve the same
-%problem.
 
 \subsubsection{Transactions}
 To understand how transactions are used in the IOD layer, some terminology and
@@ -1113,140 +877,6 @@ these requires some different metadata storage and the migration is transparent
 to the user.  Supporting fully independent metadata with this model is
 difficult. Serious thought on how to do this effectively outside the data path
 will be considered for phase two.
-
-%Based on the lessons from the \DDT metadata
-%service~\cite{lofstead:2012:txn-metadata} construction and the prior
-%experiments with LWFS, having a completely separate metadata service is
-%workable. Rather than making it a bottleneck in the IO path, it is another
-%service that users must interact with if they need those services.  Users can
-%manage everything by maintaining the metadata including the list of objects
-%themselves. However, there are drawbacks to this 100\% client-side approach.
-%
-%With a client-side only approach, there is a serious risk of the metadata
-%service and the object store getting out of sync.  While having a metadata-less
-%object storage service is desirable, the different semantics from traditional
-%file systems requires some considerations. In this case, should these services
-%get out of sync, three particular risks are introduced.  First, a client could
-%create a dangling entry in the metadata service that does not correspond to any
-%objects in the object store. Second, a client could create orphaned objects
-%that have no associated metadata entries. Third, updates to the metadata or
-%object store service should be an atomic operation, but due to a lack of
-%coordination, a window where the system is inconsistent appears.
-%
-%Ultimately, the consistency semantics required must be determined. If a
-%metadata service is required and it must be in sync with the object storage
-%service, then additional work must be performed. In traditional file systems,
-%the metadata and object storage updates are atomic. With decoupling metadata
-%from object storage, should this atomicity still be desired, it requires both
-%the ability for the services to participate in a task that is part of a larger
-%atomic operation and a higher-level mechanism to manage the atomic operation.
-%
-%Overall, while additional work is required to maintain a client-side only
-%metadata service, it eliminates any potential bottlenecks related to updating
-%metadata related to the object storage. The burden of tracking striping and
-%other metadata that has traditionally been part of the metadata associated with
-%the file system will have to be maintained by the object storage service. The
-%lack of a centralized, serialized bottleneck to store that information improves
-%concurrency.
-
-%\subsection{Comparison to \DDTns}
-%The \DDT project~\cite{lofstead:2012:txn} sought to develop an efficient
-%approach for handling ACID-style transactions in an environment with parallel
-%clients and multiple servers (doubly distributed). Rather than being aimed
-%solely at data movement operations, \DDT seeks to address the general problem
-%of managing any operation with multiple clients and servers.  Consider the
-%management of the analysis/visualization area, potentially similar to the IOD
-%concept. The transaction protocol is used to help manage resizing of the
-%resource allocation to the various analysis and visualization components.  For
-%the purposes of this discussion, \DDT could also be used to manage changing how
-%IOD processes and/or nodes are used without exposing these changes to the
-%client processes prematurely.  This has been described and analyzed
-%previously~\cite{dayal:2013:io-containers}.
-%
-%The example metadata and data storage services created as part of the \DDT
-%project have no dependencies between transactions that prevent visibility
-%should an older version be incomplete. This additional, intentional requirement
-%by IOD offers different functionality than \DDTns's example services. In the
-%case of \DDTns, the functionality is more minimal, but also avoids some of the
-%concerns outlined below.
-%
-%The second iteration of the protocol~\cite{lofstead:2013:pdsw-txn} fixed
-%scalability issues and demonstrated a scalable client-side coordination model
-%with excellent performance. The performance measured for a complex transaction
-%with \DDT is illustrated in Figure~\ref{fig:performance}. This performance is
-%explored in detail in a previous paper~\cite{lofstead:2013:pdsw-txn}.
-%
-%\begin{figure}[ht]
-%%\vspace{-0.15in}
-%\centering
-%\includegraphics[keepaspectratio=true, width=0.9\columnwidth]{images/performance}
-%\vspace{-0.15in}
-%\caption{Total Transaction Overhead}
-%\label{fig:performance}
-%%\vspace{-0.15in}
-%\end{figure}
-%
-%At a high level, both \DDT and the IOD transactions have the same design. In
-%both cases, a hierarchical model is employed. In the case of \DDTns, it is a
-%purely client-side tree using semi-synchronous messaging. The messaging itself,
-%in the current implementation, uses asynchronous MPI messages. The synchronous
-%component comes from the timeout mechanism used to detect faults.  It forces a
-%level of coordination and synchronization for the protocol. For IOD, it is a
-%server-side tree and fully asynchronous relying on the existing Lustre fault
-%detection mechanism for failure detection. In both cases, there is a master in
-%charge of managing the transaction and a collection of workers that aggregate
-%into the master through second-level leaders. Beyond that, there are some
-%significant differences. Some of the different choices made by IOD raise some
-%possible concern.
-%
-%The multi-leader model introduces the possibility of forcing a rollback of an
-%entire transaction when a partial retry might be sufficient for success. Since
-%the transactions are managed at a high level rather than the individual
-%tasks, a failure in a limited distributed task can cause the entire transaction
-%to fail. For example, consider 10 processes each have 5 tasks, but 3 of those
-%10 have an additional shared task to complete. If the task shared by the 3
-%processes fails on any of the three, the entire transaction would roll back
-%because it is a coarse-grained success/failure. If a concept like
-%sub-transactions at a task granularity were used, then it would be possible for
-%the one process that failed to report just that failure. Then the transaction
-%manager could reassign the resources for these 3 processes and try just that
-%operation again. If it now succeeds, then the overall transaction can be marked
-%successful only redoing the minimum amount of work required.
-%
-%\begin{figure}[ht]
-%\centering
-%\includegraphics[keepaspectratio=true, width=0.5\columnwidth]{images/optimized-protocol}
-%\vspace{-0.15in}
-%\caption{Optimized Protocol}
-%\label{fig:optimized-protocol}
-%%\vspace{-0.25in}
-%\end{figure}
-%
-%\DDT has addressed theses issues in a couple of ways. First, the
-%sub-coordinators each have a list of processes from which they expect messages.
-%Should a message be missed, it is noticed and corrective action can be taken.
-%Second, \DDT has the concept of sub-transactions. The messaging requirements
-%are illustrated in Figure~\ref{fig:optimized-protocol}.  Sub-transactions
-%represent finer grained operations than the entire output, \DDT can manage
-%multiple writes per client by using a sub-transaction to represent the output
-%for any item to the file (container). Because of how the sub-transactions are
-%managed, the singleton sub-transactions, ones in which only a single process
-%participates, must be declared before the transaction begins so that its
-%existence can be broadcast as part of the begin transaction message. This
-%ensures there is global knowledge that the sub-transaction is expected.  That
-%way if the coordinator (transaction leader) fails, whichever process takes over
-%that role knows to expect a completion message for that sub-transaction or the
-%overall transaction cannot complete. Global sub-transactions can be defined at
-%any time since they are a global, synchronized operation broadcasting their
-%existence. While this additional layer does introduce messaging, the overhead
-%is quite small.
-%
-%The advantages of eliminating these messages is not performance as demonstrated
-%by the performance of \DDTns. Instead, it offers a much less synchronous model
-%that matches with different programming models, such as Charm++ or other
-%task-based approaches. Since it can work for the bulk-synchronous model also,
-%it is a more broadly applicable approach. This assumes that the observed
-%potential issues can be addressed successfully.
 
 \subsection{Function and Analysis Shipping}
 \label{sec:fn-shipping}
