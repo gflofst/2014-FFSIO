@@ -58,7 +58,7 @@ The DOE Extreme-Scale Technology Acceleration Fast Forward Storage and IO Stack
 project is going to have significant impact on storage systems design within
 and beyond the HPC community. With phase 1 of the project complete, it is an
 excellent opportunity to explore the complete design and how it will address
-the needs of extreme scale platforms.  This paper examimes the overall design.
+the needs of extreme scale platforms.  This paper examines the overall design.
 Each layer of the proposed stack is discussed in some detail along with
 cross-cutting topics that impact multiple layers, such as transactions and
 metadata management. We also describe the proposed features to better support
@@ -66,7 +66,7 @@ some classes of big data applications.
 
 This paper not only provides a timely summary of important aspects of the
 design specifications but also captures the underlying reasoning that is not
-available elsewhere. With this information, we encourate the broader community
+available elsewhere. With this information, we encourage the broader community
 to understand the design, intent, and future directions to foster discussion
 guiding phase 2 and the ultimate production storage stack based on this work.
 An initial performance evaluation of the early prototype implementation is also
@@ -172,7 +172,7 @@ foundation on which everything else is built with no dependence on any
 technologies specified above it (in dark pink and yellow). For example, the IOD
 layer with or without burst buffers is not required for DAOS to operate
 properly.  Instead, the DAOS layer can handle all of the IO operations from the
-user API layer, albiet with the potential performance penalty of manipulating
+user API layer, albeit with the potential performance penalty of manipulating
 the shared, persistent storage array. At the bottom is the Versioning Object
 Storage Device (VOSD) (in purple).  It serves as the interface for storing
 objects of all types efficiently for each storage device in the parallel
@@ -193,7 +193,7 @@ across multiple documents and may lack a cohesive overall view.
 The rest of the paper is organized as follows. A brief overview of related work
 is presented first in Section~\ref{sec:related}. Section~\ref{sec:end-user}
 discusses the programmatic interface end users will see when interacting with
-the storage array. This will be discussed in the contect of the HDF5 based
+the storage array. This will be discussed in the context of the HDF5 based
 example library used for the functionality demonstration. Section~\ref{sec:iof}
 briefly discusses the motivation and proposal for the IO forwarding layer.
 Section~\ref{sec:iod} describes the IO Dispatcher layer and the broad
@@ -201,8 +201,8 @@ functionality it offers. This will detail the pieces of the layer that are
 potentially optional and mention the cross-cutting features discussed in a
 later, cross-cutting section. Section~\ref{sec:daos} discusses how the DAOS
 layer functions. As with the IOD layer, the cross-cutting features will be
-mentioned, but disucssed more fully in the cross-cutting section. The VOSD
-layer is disucssed in Section~\ref{sec:vosd}. In particular, the mapping
+mentioned, but discussed more fully in the cross-cutting section. The VOSD
+layer is discussed in Section~\ref{sec:vosd}. In particular, the mapping
 between the DAOS and VOSD layers are explored as it pertains to the physical
 storage. Next is an exploration of cross-cutting features like transactions and
 metadata management in Section~\ref{sec:broader}. Since these and other
@@ -240,7 +240,7 @@ PVFS~\cite{carns:pvfs} offers optimizations to reduce metadata server load,
 such as a single process opening a file and sharing the handle. It has been
 commercialized in recent years as OrangeFS.
 
-Lustre~\cite{braam:lustre-arch} has become the defacto standard on most major
+Lustre~\cite{braam:lustre-arch} has become the de facto standard on most major
 clusters offering scalable performance and fine-grained end-user and
 programmatic control over how data is placed in the storage system.
 
@@ -431,7 +431,7 @@ implementation will only support accessing functionality already deployed to
 the IO nodes through an RPC mechanism. This initial implementation will use
 Mercury~\cite{Soumagne:2013:mercury} to access the remote functionality. For
 dynamically defined functions, a different system will be required leveraging
-something like C-on-demand~\cite{abbasi:2011:c-on-demand} or some other dynaimc
+something like C-on-demand~\cite{abbasi:2011:c-on-demand} or some other dynamic
 deployment and compilation or an interpreter system.
 
 \section{IO Dispatcher Layer}
@@ -444,7 +444,7 @@ movement can be handled by other portions of the stack. For an extreme scale
 platform, the IOD layer will be an essential pressure relief valve for the
 underlying persistent storage layer. By making it optional, the proposed stack
 can be deployed more easily on smaller clusters or for those with more
-constrainted budgets. For simplicity, the rest of this section will describe a
+constrained budgets. For simplicity, the rest of this section will describe a
 full stack including all of the proposed IOD components.
 
 The core idea for IOD is to provide a way to manage IO load that is
@@ -501,7 +501,7 @@ as additional key-value objects representing sub-groups for the hierarchy. Each
 of those key-value store objects works identically.
 
 Attributes are stored in a key-value store object, but use the
-multi-dimnensional array and blob objects to store the values for the
+multi-dimensional array and blob objects to store the values for the
 attributes.
 
 \subsubsection{Multi-Dimensional Array}
@@ -520,7 +520,7 @@ For both IO performance and to aid in analysis and other data processing, the
 multi-dimensional array object can be split across multiple IO nodes. Each
 piece of this array is called a {\em shard}.  The idea of sharding is to store
 a logically complete portion of a data set on a single storage target. This is
-similiar in concept to the HDF5 hyperslab.  The FFSIO stack supports sharding
+similar in concept to the HDF5 hyperslab.  The FFSIO stack supports sharding
 the data in the default or some other structured way as well as ``re-sharding''
 based on application needs. For example, reordering the data so that a
 different dimension is the ``fast'' dimension may greatly improve the
@@ -532,7 +532,7 @@ to analyze.  The IOD API supports the following sharding strategies:
 \itemsep1pt\parskip0pt\parsep0pt
 \item
   \textbf{contiguous}. fixed chunking, distributed in a round-robin
-  fashion accross the IO nodes.
+  fashion across the IO nodes.
 \item
   \textbf{chunked}. same as above but with irregular (sparse) chunking.
 \item
@@ -571,7 +571,7 @@ anticipate the execution of analytical tasks.
 \vspace{-0.10in}
 \includegraphics[width=\columnwidth]{images/exa-arch.png}
 \vspace{-0.20in}
-\caption{Exascale Architecture}
+\caption{Extreme Scale Architecture}
 \label{fig:exa-arch}
 \vspace{-0.10in}
 \end{figure}
@@ -582,9 +582,9 @@ compute nodes (CNs) through the same fast fabric (e.g., InfiniBand) while the
 connection to the external storage cluster is through a secondary, slower
 channel (e.g., 10Gb Ethernet). By providing additional storage on the IO nodes,
 such as SSDs, these nodes are capable of better regulating the IO pressure on
-the underlying storage array better than simple forwaring gateways. For this
+the underlying storage array better than simple forwarding gateways. For this
 project, using something like SSDs on the IO nodes is termed a {\em Burst
-Buffer} and is disucssed below.
+Buffer} and is discussed below.
 
 \subsection{Burst Buffers}
 \label{sec:burst}
@@ -651,7 +651,7 @@ by the VOSD layer.
 This is the layer where the container/object model is translated into the
 physical storage requirements dictated by the physical storage underneath (the
 VOSD layer). The two key design elements of this layer are the handling of
-epochs and the mapping of conatiners and objects to the underlying storage.
+epochs and the mapping of containers and objects to the underlying storage.
 
 There is a bit of a terminology shift between the IOD layer and the DAOS
 layer. For the IOD layer, a shard represents a portion of an object that is
@@ -682,7 +682,7 @@ The current implementation has the DAOS layer map the container/object data
 model onto a directory/file data model used for most existing file systems.
 Should a fully object-based file system be deployed at the VOSD layer, this
 mapping would be unnecessary. The current projections suggest that a standard
-POSIX-like file system will likey be used at the lowest level on each storage
+POSIX-like file system will likely be used at the lowest level on each storage
 device requiring the mapping at some level. To perform this mapping, DAOS
 considers the following.
 
@@ -723,12 +723,12 @@ open-source backing and GPL licensing, is a likely long-term choice.
 At a more detailed level, the design for VOSD is an increment beyond the
 current Lustre Object Storage Device design to incorporate the idea of shards
 and the versioning aspects of transactions/epochs. For every DAOS shard, the
-VOSD has information for storing and accessing the currently commited version,
-the Highest Committed Epoch, as well as a staging dataset represeting the
+VOSD has information for storing and accessing the currently committed version,
+the Highest Committed Epoch, as well as a staging dataset representing the
 next version of the object being stored. Both of these are combined in a shard
 root.
 
-For data integrity, an intent log is maiained as part of the underlying file
+For data integrity, an intent log is maintained as part of the underlying file
 system enabling fault recovery.
 
 Beyond the functionality to incorporate and expose the copy-on-write nature
@@ -745,7 +745,7 @@ user API level down into the VOSD layer. While each layer affects the concept,
 it is best to look at it across all of the layers.
 
 In the subsections that follow, we examine transactions and epochs, metadata
-management, function and analysis shipping, and the aribtrary connected graphs
+management, function and analysis shipping, and the arbitrary connected graphs
 support.
 
 \subsection{Transactions and Epochs}
@@ -834,7 +834,7 @@ DAOS epochs, when an IOD transaction is persisted to DAOS, the IOD transaction
 ID is the used as the epoch ID. The key difference is that at the DAOS layer,
 some transaction (epoch) IDs will not be represented with data since not all
 IOD transactions are necessarily persisted. Maintaining this ID continuity is
-critial for multiplatform use. Since the shared point is the DAOS layer, any
+critical for multiplatform use. Since the shared point is the DAOS layer, any
 user adding a new version to a file must be able to determine the most recent
 transaction ID no matter from where the container was updated last.
 
@@ -842,7 +842,7 @@ transaction ID no matter from where the container was updated last.
 Metadata management has been a perennial challenge for parallel storage
 systems.  Eliminating metadata management as a special case and instead
 treating it just as data is a central design goal of the Fast Forward project.
-This is a hybrid approach to metadata management that is half-way between
+This is a hybrid approach to metadata management that is halfway between
 providing no inherent metadata support and having a fully integrated, but
 separate metadata management system.
 
@@ -883,7 +883,7 @@ will be considered for phase two.
 
 A client/server architecture is implemented for the Compute Node-IO Node
 communication model.  Every ION runs an IOFSL (IO Function Shipping Layer)
-server. The IOFSL client is integrated into the HDF5 library which runs on each
+server. The IOFSL client is integrated into the HDF5 library running on each
 CN. A client can forward requests to any number of IONs. Every IO operation
 issued by HDF5 is asynchronously shipped to the IOFSL server and asynchronously
 executed. As it is currently implemented, the only functionality that can be
@@ -904,7 +904,7 @@ middle are graph applications that, with some replicated data, can be made to
 fit reasonably well into the MapReduce model. The challenge is having access to
 the edge and vertex lists effectively to build partitions for independent
 processing. GraphBuilder~\cite{Jain:2013:GraphBuilder} is a tool to generate
-effective graph paritions reducing the load for using MapReduce to process
+effective graph partitions reducing the load for using MapReduce to process
 graph data sets. GraphLab~\cite{Low:2012:GraphLab} offers a way to process
 these graphs efficiently for parallel platforms using a minimum of
 communication. Using these tools as motivators, changes to the HDF5 interface
@@ -921,8 +921,8 @@ illustrates the architecture of both frameworks:
 \vspace{-0.10in}
 \end{figure}
 
-In order to make both of these tools work on top of the exascale stack, they
-both have to be modified. After these modifications are implemented,
+In order to make both of these tools work on top of the extreme scale stack,
+they both have to be modified. After these modifications are implemented,
 GraphBuilder will be able to write the partitioned graph in the newly proposed
 HDF5 files which will thus be stored in the IOD nodes (or IONs) in a
 parallel-optimized way. On the GraphLab side, HDF5-awareness will allow
@@ -943,7 +943,7 @@ provide, from the GraphBuilder/GraphLab point of view:
 \item
   asynchronous vertex updates
 \item
-  efficient data sharing ammong CNs
+  efficient data sharing among CNs
 \item
   computation over versioned datasets
 \end{itemize}
@@ -954,30 +954,6 @@ proven during phase two with a demonstration of GraphBuilder and GraphLab.
 
 \section{Demonstration}
 \label{sec:evaluation}
-
-This stack has an early prototype implementation intended to test concepts
-rather than performance and scalability. It has focused on examining the
-interaction of the different APIs for each layer to flesh out any detailed
-requirements or concerns that may have been missed in the conceptualization of
-this IO stack. To demonstrate the viability of the IO stack described in this
-paper, we show some very early performance results from the untuned prototype.
-
-All of the tests are performed on the Buffy Cray test cluster at Los Alamos
-National Laboratory. It consists of 84 nodes each with dual, 8 core Intel
-Xeon ES-2670 CPUs at 2.6 GHz and 32 GB RAM. The inteconnect is Cray Gemini.
-The storage array are three sets of SSD-based lustre file systems.
-
-We run two different sets of tests. The first set in
-Figure~\ref{fig:eval-hosts} show the reading and writing performance for
-different number of hosts. Each read or write is 4 GB against the x-axis number
-of hosts. The second set in Figure~\ref{fig:eval-size} show the performance of
-reading and writing different sizes for 56 clients, the smallest client count
-when performance stabilizes in the number of hosts tests.  The performance of
-both of these tests are reported to give a very rough idea of the overhead that
-might be involved. Rather than a true overhead, this should be considered the
-maximum overhead that should be expected once an optimized, fully functional IO
-stack is deployed without relying on translating to an underlying parallel file
-system. 
 
 \begin{figure*}[htbp!]
 \centering
@@ -1001,12 +977,36 @@ system.
 \vspace{-0.05in}
 \end{figure*}
 
+This stack has an early prototype implementation intended to test concepts
+rather than performance and scalability. It has focused on examining the
+interaction of the different APIs for each layer to flesh out any detailed
+requirements or concerns that may have been missed in the conceptualization of
+this IO stack. To demonstrate the viability of the IO stack described in this
+paper, we show some very early performance results from the untuned prototype.
+
+All of the tests are performed on the Buffy Cray test cluster at Los Alamos
+National Laboratory. It consists of 84 nodes each with dual, 8 core Intel
+Xeon ES-2670 CPUs at 2.6 GHz and 32 GB RAM. The interconnect is Cray Gemini.
+The storage array are three sets of SSD-based Lustre file systems.
+
+We run two different sets of tests. The first set in
+Figure~\ref{fig:eval-hosts} show the reading and writing performance for
+different number of hosts. Each read or write is 4 GB against the x-axis number
+of hosts. The second set in Figure~\ref{fig:eval-size} show the performance of
+reading and writing different sizes for 56 clients, the smallest client count
+when performance stabilizes in the number of hosts tests.  The performance of
+both of these tests are reported to give a very rough idea of the overhead that
+might be involved. Rather than a true overhead, this should be considered the
+maximum overhead that should be expected once an optimized, fully functional IO
+stack is deployed without relying on translating to an underlying parallel file
+system. 
+
 \section{Conclusions}
 \label{sec:conclusion}
 
 The Fast Forward Storage and IO Stack project has designed a good first pass at
 addressing the requirements for an extreme scale data storage mechanism.  By
-prefering a high level user API like HDF5 rather than using the POSIX
+preferring a high level user API like HDF5 rather than using the POSIX
 interface, more advanced functionality can be incorporated with less end-user
 impact. The introduction of the IOD layer with buffering will absorb the
 difference between the compute node IO demands and the available bandwidth in
