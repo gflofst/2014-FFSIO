@@ -252,17 +252,18 @@ Panasas~\cite{panasas:architecture} seeks to offer a dynamically adaptive
 striping system that detects the need for additional stripes for performance
 and adjusts the file layout as necessary.
 
-Other file systems, like GoogleFS~\cite{ghemawat:googlefs}, address distributed
-rather than parallel computing and cannot be compared directly. The primary
-difference between distributed and parallel file systems is the ability of the
-file system to store and retrieve data simultaneously from multiple clients, in
-parallel, and treat the resulting collection of pieces as a single object.
-Distributed file systems rely on a single client creating a file, but
-distributing the set of files across a wide array of storage devices. The
-other, popular distributed file system of note is
-HDFS~\cite{Shvachko:2010:hdfs} that is distributed as part of Hadoop. These
-other file systems are mainly of interest in the context of the ACG features of
-FFSIO and will be discussed more in Section~\ref{sec:acg}.
+Other file systems, like GoogleFS~\cite{ghemawat:googlefs} and
+HDFS~\cite{Shvachko:2010:hdfs}, address distributed rather than parallel
+computing and cannot be compared directly. The primary difference between
+distributed and parallel file systems is the ability of the file system to
+store and retrieve data simultaneously from multiple clients, in parallel, and
+treat the resulting collection of pieces as a single object.  Distributed file
+systems rely on a single client creating a file, but distributing the set of
+files across a wide array of storage devices. The other, popular distributed
+file system of note is NFS~\cite{powlowski:1994:nfs3} that has been used for
+decades for enterprise file systems.  These other file systems are mainly of
+interest in the context of the ACG features of FFSIO and will be discussed more
+in Section~\ref{sec:acg}.
 
 \section{End-User API Layer}
 \label{sec:end-user}
@@ -493,7 +494,9 @@ Functionally, a container plays the same role as a file in that it holds a
 collection of presumably related data intended to be accessed and manipulated
 as a unit. Since this is extended from HDF5 files, the container could also be
 viewed as a directory tree of objects where each directory entry specifies
-either a sub-directory (group) or some data or attribute.
+either a sub-directory (group) or some data or attribute. For the IOD layer, it
+is a collection of objects. For HDF5, interpreting the objects builds the
+structure.
 
 \subsubsection{Key-Value Store}
 This is the base type for the container. Since the container represents
@@ -501,11 +504,11 @@ something akin to HDF5 files, everything is stored within a hierarchical
 namespace. The root namespace is represented by the base key-value store and
 contains a list of all of the objects for this portion of the namespace as well
 as additional key-value objects representing sub-groups for the hierarchy. Each
-of those key-value store objects works identically.
-
-Attributes are stored in a key-value store object, but use the
-multi-dimensional array and blob objects to store the values for the
-attributes.
+of those key-value store objects works identically.  Attributes are stored in a
+key-value store object.
+%, but use the
+%multi-dimensional array and blob objects to store the values for the
+%attributes.
 
 \subsubsection{Multi-Dimensional Array}
 By treating arrays as a special case separate from blobs, additional

@@ -120,6 +120,11 @@ Object-based storage architecture: Defining a new generation of storage systems
 \newblock Panasas Inc. white paper, version 1.0, Oct. 2003.
 \newblock http://www.panasas.com/docs/.
 
+\bibitem{powlowski:1994:nfs3}
+B.~Powlowski, C.~Juszczak, P.~Staubach, C.~Smith, D.~Lebel, and D.~Hitz.
+\newblock {NFS} version 3: Design and implementations.
+\newblock pages 137--152, 1994.
+
 \bibitem{rodeh:2013:btrfs}
 O.~Rodeh, J.~Bacik, and C.~Mason.
 \newblock Btrfs: The linux b-tree filesystem.
