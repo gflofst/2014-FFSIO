@@ -52,7 +52,7 @@ P.~H. Carns, W.~B. {Ligon III}, R.~B. Ross, and R.~Thakur.
 Fastforward storage and i/o stack design documents.
 \newblock Intel FastForward Wiki, February 2014.
 \newblock
-  https://wiki.hpdd.intel.com/display/PUB/Fast+Forward+Storage+and\\+IO+Program+Documents.
+  https://wiki.hpdd.intel.com/display/PUB/Fast+Forward+\\Storage+and+IO+Program+Documents.
 
 \bibitem{ghemawat:googlefs}
 S.~Ghemawat, H.~Gobioff, and S.-T. Leung.
@@ -60,39 +60,11 @@ S.~Ghemawat, H.~Gobioff, and S.-T. Leung.
 \newblock In {\em Proceedings of the NineteenthACM Symposium on Operating
   Systems Principles}, pages 96--108, Bolton Landing, NY, Oct. 2003. ACM Press.
 
-\bibitem{Jain:2013:GraphBuilder}
-N.~Jain, G.~Liao, and T.~L. Willke.
-\newblock Graphbuilder: Scalable graph etl framework.
-\newblock In {\em First International Workshop on Graph Data Management
-  Experiences and Systems}, GRADES '13, pages 4:1--4:6, New York, NY, USA,
-  2013. ACM.
-
 \bibitem{lofstead:2011:nessie-staging}
 J.~Lofstead, R.~Oldfiend, T.~Kordenbrock, and C.~Reiss.
 \newblock Extending scalability of collective io through nessie and staging.
 \newblock In {\em The Petascale Data Storage Workshop at Supercomputing},
   Seattle, WA, November 2011.
-
-\bibitem{lofstead:2009:adaptable}
-J.~Lofstead, F.~Zheng, S.~Klasky, and K.~Schwan.
-\newblock Adaptable, metadata rich {IO} methods for portable high performance
-  {IO}.
-\newblock In {\em Proceedings of the International Parallel and Distributed
-  Processing Symposium}, Rome, Italy, 2009.
-
-\bibitem{lofstead:2010:io-variability}
-J.~Lofstead, F.~Zheng, Q.~Liu, S.~Klasky, R.~Oldfield, T.~Kordenbrock,
-  K.~Schwan, and M.~Wolf.
-\newblock Managing variability in the {IO} performance of petascale storage
-  systems.
-\newblock In {\em Proceedings ofSC2010: High Performance Networking and
-  Computing}, Nov. 2010.
-
-\bibitem{Low:2012:GraphLab}
-Y.~Low, D.~Bickson, J.~Gonzalez, C.~Guestrin, A.~Kyrola, and J.~M. Hellerstein.
-\newblock Distributed graphlab: A framework for machine learning and data
-  mining in the cloud.
-\newblock {\em Proc. VLDB Endow.}, 5(8):716--727, Apr. 2012.
 
 \bibitem{nisar:2008:staging}
 A.~Nisar, W.-k. Liao, and A.~Choudhary.
@@ -106,13 +78,6 @@ P.~Nowoczynski, N.~Stone, J.~Yanovich, and J.~Sommerfield.
 \newblock Zest checkpoint storage system for large supercomputers.
 \newblock In {\em Petascale Data Storage Workshop, 2008. PDSW '08. 3rd}, pages
   1 --5, nov. 2008.
-
-\bibitem{oldfield:lwfs}
-R.~A. Oldfield, A.~B. Maccabe, S.~Arunagiri, T.~Kordenbrock, R.~Riesen,
-  L.~Ward, and P.~Widener.
-\newblock Lightweight {I/O} for scientific applications.
-\newblock In {\em Proceedings of the IEEE International Conference on Cluster
-  Computing}, Barcelona, Spain, Sept. 2006.
 
 \bibitem{panasas:architecture}
 Object-based storage architecture: Defining a new generation of storage systems
@@ -162,11 +127,6 @@ S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
 \newblock In {\em Proceedings of the 2006Symposium on Operating Systems Design
   and Implementation}, pages 307--320. University of California, Santa Cruz,
   2006.
-
-\bibitem{weil:2006:ceph}
-S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
-\newblock {Ceph}: A scalable, high-performance distributed file system.
-\newblock In {\em OSDI'06}, Seattle, WA, Nov. 2006.
 
 \bibitem{zhang:2010:zfs}
 Y.~Zhang, A.~Rajimwale, A.~C. Arpaci-Dusseau, and R.~H. Arpaci-Dusseau.
