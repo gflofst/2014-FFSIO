@@ -31,11 +31,9 @@
 
 \begin{document}
 
-%\title{Fast Forwarding Storage for Extreme Scale Platforms and Big Data Applications}
-\title{Lessons Learned from the Fast Forward Storage and I/O Project}
+\title{DAOS and Friends: A Proposal for\\an Exascale Storage System}
 
 \author{
-%\IEEEauthorblockN{Blinded for review},\IEEEauthorblockA{}
 \IEEEauthorblockN{Jay Lofstead\IEEEauthorrefmark{1}, Ivo Jimenez\IEEEauthorrefmark{2}, Carlos Maltzahn\IEEEauthorrefmark{2}, Quincey Koziol\IEEEauthorrefmark{3}, John Bent\IEEEauthorrefmark{4}, Eric Barton\IEEEauthorrefmark{5}}
 \IEEEauthorblockA{\IEEEauthorrefmark{1}Sandia National Laboratories gflofst@sandia.gov}
 \IEEEauthorblockA{\IEEEauthorrefmark{2}University of California, Santa Cruz ivo@cs.ucsc.edu, carlosm@soe.ucsc.edu}
@@ -101,7 +99,8 @@ systems have grown up using storage distributed on all of the nodes driving a
 very different software architecture. With post-exascale platforms required to
 address both workloads, a new storage stack is required.
 
-To address these challenges, a joint effort between the US Department of
+%To address these challenges,
+A joint effort between the US Department of
 Energy's Office of Advanced Simulation and Computing and Advanced Scientific
 Computing Research commissioned a project to develop a design and prototype for
 an IO stack suitable for the extreme scale environment. It will be referred to
@@ -132,20 +131,21 @@ code changes.  Managing most data access in a platform-local layer rather than
 requiring writing to centralized storage will better support the performance
 and energy requirements of extreme scale application compositions.
 
-Overall, the architecture shifts from the idea of files and directories to
-containers of objects. This shift avoids the bottlenecks related to the POSIX
-files and directories structure such as the serialization of file creation, the
-limitation and impact of the number of files in a directory, and the limited
-semantics of a byte stream. Instead, the new interface focuses on high-level
-data models and their properties and relationships. This concept permeates the
-entire IO stack.
+%Overall, the architecture shifts from the idea of files and directories to
+%containers of objects. This shift avoids the bottlenecks related to the POSIX
+%files and directories structure such as file creation serialization, the
+%file count in a directory limitation and impact, and the limited
+%semantics of a byte stream. Instead, the new interface focuses on high-level
+%data models and their properties and relationships. This concept permeates the
+%entire IO stack.
 
-In addition to addressing the traditional scientific workload, this project
-seeks to expand functionality to better support Big Data type applications. The
-key idea is to support Arbitrary Connected Graphs (ACGs) such as those used in
-Map-Reduce systems. Key system features are introduced to efficiently support
-these computing models in addition to the typically bursty IO loads of more
-traditional HPC applications.
+%In addition to addressing the traditional scientific workload, this project
+%seeks to expand functionality to better support Big Data type applications. The
+%key idea is to support Arbitrary Connected Graphs (ACGs) such as those used in
+%Map-Reduce systems. Key system features are introduced to efficiently support
+%these computing models in addition to the typically bursty IO loads of more
+%traditional HPC applications. These features are not discussed for space
+%reasons.
 
 \begin{figure}[htbp]
 %\vspace{-0.10in}
@@ -222,24 +222,35 @@ been presented.
 The rest of the paper is organized as follows. An overview of related work is
 presented first in Section~\ref{sec:related}. Section~\ref{sec:end-user}
 discusses the programmatic interface end users will see when interacting with
-the storage array. This will be discussed in the context of the HDF5 based
-example library used for the functionality demonstration. Section~\ref{sec:iof}
+the storage array.
+%This will be discussed in the context of the HDF5 based
+%example library used for the functionality demonstration.
+Section~\ref{sec:iof}
 briefly discusses the motivation and proposal for the IO forwarding layer.
 Section~\ref{sec:iod} describes the IO Dispatcher layer and the broad
-functionality it offers. This will detail the pieces of the layer that are
-potentially optional and mention the cross-cutting features discussed in a
-later, cross-cutting section. Section~\ref{sec:daos} discusses how the DAOS
-layer functions. As with the IOD layer, the cross-cutting features will be
-mentioned, but discussed more fully in the cross-cutting section. The VOSD
-layer is discussed in Section~\ref{sec:vosd}. In particular, the mapping
-between the DAOS and VOSD layers are explored as it pertains to the physical
-storage. Next is an exploration of cross-cutting features like transactions and
-metadata management in Section~\ref{sec:broader}. Since these and other
-features are spread across multiple layers, it makes more sense to discuss them
-independently once an understanding of the overall structure has been
-presented.  A demonstration of the functionality is presented in
-Section~\ref{sec:evaluation}. This shows that the prototype system based on the
-proposed design can function. The paper is concluded in
+functionality it offers.
+%This will detail the pieces of the layer that are
+%potentially optional and mention the cross-cutting features discussed in a
+%later, cross-cutting section.
+Section~\ref{sec:daos} discusses how the DAOS
+layer functions.
+%As with the IOD layer, the cross-cutting features will be
+%mentioned, but discussed more fully in the cross-cutting section.
+The VOSD layer is discussed in Section~\ref{sec:vosd}.
+%In particular, the mapping
+%between the DAOS and VOSD layers are explored as it pertains to the physical
+%storage.
+Next is an exploration of cross-cutting features like transactions and
+metadata management in Section~\ref{sec:broader}.
+%Since these and other
+%features are spread across multiple layers, it makes more sense to discuss them
+%independently once an understanding of the overall structure has been
+%presented.
+A demonstration of the functionality is presented in
+Section~\ref{sec:evaluation}.
+%This shows that the prototype system based on the
+%proposed design can function.
+The paper is concluded in
 Section~\ref{sec:conclusion} with a summary of the broad issues covered in the
 paper.
 
@@ -379,7 +390,7 @@ the new API.  The additions comprise (Figure~\ref{fig:vol-arch}):
   API extensions to support new functionality provided by the FFSIO project.
   This includes calls for managing asynchronous request lists, performing
   asynchronous operations, creating and managing transactions, end-to-end data
-  integrity, and data type and functions to support the ACG functionality more
+  integrity, and data type and functions to support the big data oriented functionality more
   efficiently than the current API.
 
 \item
@@ -488,7 +499,7 @@ layer).
 \subsection{HDF5 to FFSIO Mapping}
 \label{sec:hdf-to-ffsio}
 
-Since HDF5 has traditionally offered an interface focused on files and the
+Since HDF5~\cite{hdf5} has traditionally offered an interface focused on files and the
 internal data types, such as datasets, these concepts must be mapped onto the
 proposed FFSIO data storage concepts.  This mapping is shown in
 Table~\ref{tab:mapping}
@@ -499,7 +510,6 @@ Table~\ref{tab:mapping}
     \caption[HDF5 to FFSIO Mapping]{HDF5 Data Model to FFSIO Data Model Mapping}
     \bigskip
 %    \vspace{-0.15in}
-
     \begin{tabular}{|r|r|}
 \hline
 HDF5 & FFSIO\\
@@ -562,24 +572,27 @@ separate from the compute nodes and the storage array. Communication intensive
 activities, such as data rearrangement, can be moved to the IOD layer
 reducing the number of participants and message count. IOD has three main
 purposes. First, the burst buffers work as a fast cache absorbing write
-operations that then trickles out to the central storage array. It can also
-be used to retrieve objects from the central storage array for more efficient
-read operations and offers data filtering to make client reads more efficient.
+operations or pre-staging read operations.
+%that then trickles out to the central storage array. It can also
+%be used to retrieve objects from the central storage array for more efficient
+%read operations and offers data filtering to make client reads more efficient.
 Second, it offers the transaction mechanism for controlling data set visibility
 and to manage faults that could expose an incomplete or corrupt data set to
-users. These transactions are local to the IOD layer until persisted to the
-DAOS layer eliminating the need for burdening the persistent storage with
-transient data.  Third, data processing operations can be placed in the IOD.
+users.
+%These transactions are local to the IOD layer until persisted to the
+%DAOS layer eliminating the need for burdening the persistent storage with
+%transient data.
+Third, data processing operations can be placed in the IOD.
 These operations are intended to offer functionality like data rearrangement
 and filtering prior to data reaching the central storage array.
 
-While these ideas are not necessarily new, they are new twists on best of class
-efforts for these technologies. For example, offloading the collective
-two-phase data sieving from the compute nodes to reorganize data has proven
-effective at reducing the total time for writing data due to fewer participants
-involved in the communication patterns~\cite{lofstead:2011:nessie-staging}.
-Beyond these broad items, there are many important details some of which are
-examined in more detail below.
+%While these ideas are not necessarily new, they are new twists on best of class
+%efforts for these technologies. For example, offloading the collective
+%two-phase data sieving from the compute nodes to reorganize data has proven
+%effective at reducing the total time for writing data due to fewer participants
+%involved in the communication patterns~\cite{lofstead:2011:nessie-staging}.
+%Beyond these broad items, there are many important details some of which are
+%examined in more detail below.
 
 \subsection{FFSIO Data Model Types}
 \label{sec:data-model}
@@ -588,23 +601,26 @@ With the shift from a directories and stream-of-bytes files model to the
 container and object model, some description is required to better understand
 how these concepts are being used as well as the raw benefits.
 
-\subsubsection{Container}
-As mentioned above, the concept of a container is similar to that of a file in
-a traditional file system. However, rather than being in a directory structure,
-each container essentially is stored in a hash-space allowing direct access to
+\textbf{Container}
+%As mentioned above, the concept of
+A container is similar to that of a file in a traditional file system. However,
+rather than being in a directory structure, each container essentially is
+stored in a hash-space allowing direct access to
 any container without regard to the current organizational context of the
-file system. For example, there is no need to navigate a directory hierarchy
-to name a particular container.
-
-Functionally, a container plays the same role as a file in that it holds a
-collection of presumably related data intended to be accessed and manipulated
-as a unit. Since this is extended from HDF5 files, the container could also be
+file system.
+%For example, there is no need to navigate a directory hierarchy
+%to name a particular container.
+%
+%Functionally, a container plays the same role as a file in that it holds a
+%collection of presumably related data intended to be accessed and manipulated
+%as a unit.
+Since this is extended from HDF5 files, the container could also be
 viewed as a directory tree of objects where each directory entry specifies
 either a sub-directory (group) or some data or attribute. For the IOD layer, it
 is a collection of objects. For HDF5, interpreting the objects builds the
 structure.
 
-\subsubsection{Key-Value Store}
+\textbf{Key-Value Store}
 This is the base type for the container. Since the container represents
 something akin to HDF5 files, everything is stored within a hierarchical
 namespace. The root namespace is represented by the base key-value store and
@@ -615,17 +631,17 @@ key-value store object, but use the
 multi-dimensional array and blob objects to store the values for the
 attributes.
 
-\subsubsection{Multi-Dimensional Array}
+\textbf{Multi-Dimensional Array}
 By treating arrays as a special case separate from blobs, additional
 opportunities are enabled. For example, by knowing that an object is an array,
 proper slicing of that array onto IO nodes can be done without involving higher
 levels of the IO stack.
 
-\subsubsection{Blob}
+\textbf{Blob}
 All other data is stored as a stream-of-bytes without regard to the actual
 data type.
 
-\subsection{Multi-Dimensional Array Data Distribution}
+\subsection{Multi-Dimensional Arrays}
 
 For both IO performance and to aid in analysis and other data processing, the
 multi-dimensional array object can be split across multiple IO nodes. Each
@@ -643,10 +659,10 @@ to analyze.  The IOD API supports the following sharding strategies:
 \item
   \textbf{contiguous}. fixed chunking, distributed in a round-robin
   fashion across the IO nodes.
-\item
-  \textbf{chunked}. same as above but with irregular (sparse) chunking.
-\item
-  \textbf{user-defined}. either contiguous or chunked, but user specifies
+%\item
+  \textbf{(2)chunked}. same as above but with irregular (sparse) chunking.
+%\item
+  \textbf{(3)user-defined}. either contiguous or chunked, but user specifies
   where to place each individual shard.
 \end{itemize}
 
@@ -714,11 +730,12 @@ being deployed into the platform, each application will be allocated a fixed
 number of IO nodes for exclusive use during the application run. This provides
 guarantees about how much burst buffer space and processing capability will be
 available for the applications.
-
-Future work will generalize this model to potentially support dynamic IO node
-allocation and examine the possibility of oversubscription. It will be strictly
-necessary to consider shared IO nodes for cases where the number of deployed
-applications exceeds the number of IO nodes.  This first phase focuses on
+%
+%Future work will generalize this model to potentially support dynamic IO node
+%allocation and examine the possibility of oversubscription. It will be strictly
+%necessary to consider shared IO nodes for cases where the number of deployed
+%applications exceeds the number of IO nodes.
+This first phase focuses on
 extreme scale application runs that use the vast majority of a platform rather
 than a capacity cluster where end-to-end performance is a lesser concern.
 
@@ -772,7 +789,6 @@ The Distributed Asynchronous Object Storage layer serves as the traditional
 parallel file system interface layer for the storage devices. This is the
 consistent, global view of the underlying devices represented in this stack
 by the VOSD layer.
-
 This is the layer where the container/object model is translated into the
 physical storage requirements dictated by the physical storage underneath (the
 VOSD layer). The two key design elements of this layer are the handling of
@@ -876,21 +892,21 @@ Lustre. In a production version of the FFSIO stack,
 btrfs~\cite{rodeh:2013:btrfs}, The Linux B-Tree File System, given its
 open-source backing and GPL licensing, is a likely long-term choice.
 
-At a more detailed level, the design for VOSD is an increment beyond the
-current Lustre Object Storage Device design to incorporate the idea of shards
-and the versioning aspects of transactions/epochs. For every DAOS shard, the
-VOSD has information for storing and accessing the currently committed version,
-the Highest Committed Epoch, as well as a staging dataset representing the
-next version of the object being stored. Both of these are combined in a shard
-root.
-
-For data integrity, an intent log is maintained as part of the underlying file
-system enabling fault recovery.
-
-Beyond the functionality to incorporate and expose the copy-on-write nature
-of the underlying file system and the semantics for storing and processing
-shards and their associated epochs, this is largely an evolution of the
-existing Lustre OSD layer.
+%At a more detailed level, the design for VOSD is an increment beyond the
+%current Lustre Object Storage Device design to incorporate the idea of shards
+%and the versioning aspects of transactions/epochs. For every DAOS shard, the
+%VOSD has information for storing and accessing the currently committed version,
+%the Highest Committed Epoch, as well as a staging dataset representing the
+%next version of the object being stored. Both of these are combined in a shard
+%root.
+%
+%For data integrity, an intent log is maintained as part of the underlying file
+%system enabling fault recovery.
+%
+%Beyond the functionality to incorporate and expose the copy-on-write nature
+%of the underlying file system and the semantics for storing and processing
+%shards and their associated epochs, this is largely an evolution of the
+%existing Lustre OSD layer.
 
 \section{Broader Design}
 \label{sec:broader}
@@ -901,8 +917,29 @@ user API level down into the VOSD layer. While each layer affects the concept,
 it is best to look at each concept across all of the layers.
 
 In the subsections that follow, we examine transactions and epochs, metadata
-management, function and analysis shipping, and the arbitrary connected graphs
-support.
+management, and function and analysis shipping.
+
+\begin{figure*}[htbp!]
+\centering
+%\vspace{-0.10in}
+\subfigure[Write Hosts]{\label{fig:write-hosts}\includegraphics[width=\columnwidth]{images/write-hosts.png}}
+\subfigure[Read Hosts]{\label{fig:read-hosts}\includegraphics[width=\columnwidth]{images/read-hosts.png}}
+%\vspace{-0.10in}
+\caption{Functionality Demonstration Validation for Number of Hosts}
+\label{fig:eval-hosts}
+%\vspace{-0.05in}
+\end{figure*}
+
+\begin{figure*}[htbp!]
+\centering
+%\vspace{-0.10in}
+\subfigure[Write Size]{\label{fig:write-size}\includegraphics[width=\columnwidth]{images/write-size.png}}
+\subfigure[Read Size]{\label{fig:read-size}\includegraphics[width=\columnwidth]{images/read-size.png}}
+%\vspace{-0.10in}
+\caption{Functionality Demonstration Validation for Data Sizes}
+\label{fig:eval-size}
+%\vspace{-0.2in}
+\end{figure*}
 
 \subsection{Transactions and Epochs}
 \label{sec:transactions}
@@ -945,7 +982,8 @@ The second form is called multi-leader and has the IOD layer manage the
 transactions. In this case, when the transaction is created, a count of clients
 is provided to the IOD layer. As clients commit their changes to the container,
 the reference count is reduced. Once the count reaches 0, the transaction is
-automatically committed.
+automatically committed. Aggregation into a smaller set of leaders is also
+possible.
 
 \subsubsection{Epochs}
 
@@ -1012,20 +1050,20 @@ copy-on-write.  A more in depth discussion of how transactions and checkpoint
 restart work is presented in BAD Check~\cite{bent:2015:pdsw}.
 
 \subsection{Metadata Management}
-Metadata management has been a perennial challenge for parallel storage
-systems.  Eliminating metadata management as a special case and instead
-treating it just as data is a central design goal of the Fast Forward project.
-This is a hybrid approach to metadata management that is halfway between
-providing no inherent metadata support and having a fully integrated, but
-separate metadata management system.
+%Metadata management has been a perennial challenge for parallel storage
+%%systems.  Eliminating metadata management as a special case and instead
+%treating it just as data is a central design goal of the Fast Forward project.
+%FFSIO uses a hybrid approach to metadata management that is halfway between
+%providing no inherent metadata support and having a fully integrated, but
+%separate metadata management system.
 
-Eliminating metadata as a core component of a file system is not new. It has
-been explored as part of the Light Weight File Systems
-project~\cite{oldfield:lwfs}. In LWFS, the metadata service is explicitly
-limited to a user task with the storage layer limited to data
-storage/retrieval, authorization, and authentication. This approach proved
-workable. Using this hybrid approach is less common~\cite{weil:2006:ceph} and
-introduces other issues.
+%Eliminating metadata as a core component of a file system is not new. It has
+%been explored as part of the Light Weight File Systems
+%project~\cite{oldfield:lwfs}. In LWFS, the metadata service is explicitly
+%limited to a user task with the storage layer limited to data
+%storage/retrieval, authorization, and authentication. This approach proved
+%workable. Using this hybrid approach is less common~\cite{weil:2006:ceph} and
+%introduces other issues.
 
 IOD and DAOS both share a philosophy that they will have to maintain the
 metadata about how the physical pieces of the logical objects are striped and
@@ -1042,9 +1080,11 @@ are intended. For example, there will be a standard, well-known container that
 is the system metadata. This includes the list of all other containers. This
 container is treated like any other data in the system and striped as
 appropriate. Unfortunately, this still couples the metadata to a single object
-that must serialize access. If the metadata, including information about
-striping and other data layout operations were separated completely from the
-data path, more scalable throughput could be achieved. The real challenge of
+that must serialize access.
+%If the metadata, including information about
+%striping and other data layout operations were separated completely from the
+%data path, more scalable throughput could be achieved.
+The real challenge of
 this is introduced by the IOD, DAOS, and VOSD layers collectively. Each of
 these requires some different metadata storage and the migration is invisible
 to the user.  Supporting fully independent metadata with this model is
@@ -1211,10 +1251,6 @@ other activities for phase 2 will ultimately generate what is likely to be the
 next generation storage stack for extreme scale platforms.
 
 \section{Acknowledgements}
-
-%\includegraphics[scale=0.07]{logos/doe_logo}
-%\includegraphics[scale=0.30]{logos/snl_logo}
-%\includegraphics[scale=0.35]{logos/nnsa_logo}
 Sandia National Laboratories is a multi-program laboratory managed and operated
 by Sandia Corporation, a wholly owned subsidiary of Lockheed Martin
 Corporation, for the U.S. Department of Energy's National Nuclear Security

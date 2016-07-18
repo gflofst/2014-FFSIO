@@ -70,7 +70,7 @@ M.~L. Curry, L.~Ward, and G.~Danielson.
 Fastforward storage and i/o stack design documents.
 \newblock Intel FastForward Wiki, February 2014.
 \newblock
-  https://wiki.hpdd.intel.com/display/PUB/Fast+Forward+Storage+and\\+IO+Program+Documents.
+  https://wiki.hpdd.intel.com/display/PUB/Fast+Forward+\\Storage+and+IO+Program+Documents.
 
 \bibitem{ghemawat:googlefs}
 S.~Ghemawat, H.~Gobioff, and S.-T. Leung.
@@ -164,13 +164,6 @@ P.~Nowoczynski, N.~Stone, J.~Yanovich, and J.~Sommerfield.
 \newblock In {\em Petascale Data Storage Workshop, 2008. PDSW '08. 3rd}, pages
   1 --5, nov. 2008.
 
-\bibitem{oldfield:lwfs}
-R.~A. Oldfield, A.~B. Maccabe, S.~Arunagiri, T.~Kordenbrock, R.~Riesen,
-  L.~Ward, and P.~Widener.
-\newblock Lightweight {I/O} for scientific applications.
-\newblock In {\em Proceedings of the IEEE International Conference on Cluster
-  Computing}, Barcelona, Spain, Sept. 2006.
-
 \bibitem{panasas:architecture}
 Object-based storage architecture: Defining a new generation of storage systems
   built on distributed, intelligent storage devices.
@@ -227,11 +220,6 @@ S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
 \newblock In {\em Proceedings of the 2006Symposium on Operating Systems Design
   and Implementation}, pages 307--320. University of California, Santa Cruz,
   2006.
-
-\bibitem{weil:2006:ceph}
-S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
-\newblock {Ceph}: A scalable, high-performance distributed file system.
-\newblock In {\em OSDI'06}, Seattle, WA, Nov. 2006.
 
 \bibitem{zhang:2010:zfs}
 Y.~Zhang, A.~Rajimwale, A.~C. Arpaci-Dusseau, and R.~H. Arpaci-Dusseau.
