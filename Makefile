@@ -1,5 +1,5 @@
 PAPER=paper
-all: paper.tex
+all: ${PAPER}.tex
 	rm -f ${PAPER}.pdf
 	rm -f ${PAPER}.dvi
 	rm -f ${PAPER}.aux
