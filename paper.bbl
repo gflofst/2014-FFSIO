@@ -56,6 +56,7 @@ P.~H. Carns, W.~B. {Ligon III}, R.~B. Ross, and R.~Thakur.
 
 \bibitem{curry:2016:sirocco}
 M.~Curry, G.~Danielson, L.~Ward, and J.~Lofstead.
+\newblock An overview of the sirocco parallel storage system.
 \newblock In {\em 2016 HPC-IO in the Data Center Workshop at ISC 2016}.
   Springer, 2016.
 
@@ -71,6 +72,12 @@ Fastforward storage and i/o stack design documents.
 \newblock Intel FastForward Wiki, February 2014.
 \newblock
   https://wiki.hpdd.intel.com/display/PUB/Fast+Forward+\\Storage+and+IO+Program+Documents.
+
+\bibitem{folk:2011:hdf5}
+M.~Folk, G.~Heber, Q.~Koziol, E.~Pourmal, and D.~Robinson.
+\newblock An overview of the hdf5 technology suite and its applications.
+\newblock In {\em Proceedings of the {EDBT/ICDT} 2011 Workshop on Array
+  Databases}, pages 36--47. ACM, 2011.
 
 \bibitem{ghemawat:googlefs}
 S.~Ghemawat, H.~Gobioff, and S.-T. Leung.
@@ -164,6 +171,13 @@ P.~Nowoczynski, N.~Stone, J.~Yanovich, and J.~Sommerfield.
 \newblock In {\em Petascale Data Storage Workshop, 2008. PDSW '08. 3rd}, pages
   1 --5, nov. 2008.
 
+\bibitem{oldfield:lwfs}
+R.~A. Oldfield, A.~B. Maccabe, S.~Arunagiri, T.~Kordenbrock, R.~Riesen,
+  L.~Ward, and P.~Widener.
+\newblock Lightweight {I/O} for scientific applications.
+\newblock In {\em Proceedings of the IEEE International Conference on Cluster
+  Computing}, Barcelona, Spain, Sept. 2006.
+
 \bibitem{panasas:architecture}
 Object-based storage architecture: Defining a new generation of storage systems
   built on distributed, intelligent storage devices.
@@ -173,7 +187,8 @@ Object-based storage architecture: Defining a new generation of storage systems
 \bibitem{powlowski:1994:nfs3}
 B.~Powlowski, C.~Juszczak, P.~Staubach, C.~Smith, D.~Lebel, and D.~Hitz.
 \newblock {NFS} version 3: Design and implementations.
-\newblock pages 137--152, 1994.
+\newblock In {\em Proceedings of the 1994 Summer USENIX Technical Conferece},
+  pages 137--152, 1994.
 
 \bibitem{rodeh:2013:btrfs}
 O.~Rodeh, J.~Bacik, and C.~Mason.
@@ -201,11 +216,6 @@ J.~Soumagne, D.~Kimpe, J.~A. Zounmevo, M.~Chaarawi, Q.~Koziol, A.~Afsahi, and
   computing.
 \newblock In {\em CLUSTER}, pages 1--8. IEEE, 2013.
 
-\bibitem{hdf5}
-{The HDF Group}.
-\newblock {Hierarchical data format version 5}, 2000-2014.
-\newblock http://www.hdfgroup.org/HDF5.
-
 \bibitem{wang:2013:ceph}
 F.~Wang, M.~Nelson, S.~Oral, S.~Atchley, S.~Weil, B.~W. Settlemyer,
   B.~Caldwell, and J.~Hill.
@@ -220,6 +230,11 @@ S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
 \newblock In {\em Proceedings of the 2006Symposium on Operating Systems Design
   and Implementation}, pages 307--320. University of California, Santa Cruz,
   2006.
+
+\bibitem{weil:2006:ceph}
+S.~A. Weil, S.~A. Brandt, E.~L. Miller, D.~D.~E. Long, and C.~Maltzahn.
+\newblock {Ceph}: A scalable, high-performance distributed file system.
+\newblock In {\em OSDI'06}, Seattle, WA, Nov. 2006.
 
 \bibitem{zhang:2010:zfs}
 Y.~Zhang, A.~Rajimwale, A.~C. Arpaci-Dusseau, and R.~H. Arpaci-Dusseau.
